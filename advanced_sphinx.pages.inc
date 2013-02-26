@@ -137,9 +137,9 @@ function theme_advanced_sphinx_search_results($variables) {
       $words[] = '<em>' . check_plain($word) . '</em> ('. t('results: @docs, repeats: @hits', array('@docs' => (int)$word_data['docs'], '@hits' => (int)$word_data['hits'])) . ')';
     }
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
+    $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', advanced_sphinx_get_query_string($search_options));
   }
   
-  $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', advanced_sphinx_get_query_string($search_options));
   $output .= theme('advanced_sphinx_result_wrapper', array('result' => $result_wrapper));
   
   // Display pager.

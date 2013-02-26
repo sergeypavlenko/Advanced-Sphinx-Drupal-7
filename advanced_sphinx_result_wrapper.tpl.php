@@ -14,9 +14,13 @@
 ?>
 
 <p>
-  <?php print $result['stat']; ?> <?php print $result['word_stat']; ?>
+  <?php print $result['stat']; ?>
+  
+  <?php if (isset($result['word_stat'])) { ?>
+    <?php print $result['word_stat']; ?>
+  <?php } ?>
 </p>
-<?php if($result['sorted']){ ?>
+<?php if(isset($result['sorted'])){ ?>
   <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php }; ?>
 <div id="advanced-search clear-block">
@@ -24,7 +28,7 @@
     <?php print $result['result']; ?>
   </ul>
 </div>
-<?php if($result['sorted']){ ?>
+<?php if(isset($result['sorted'])){ ?>
   <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php }; ?>
 
