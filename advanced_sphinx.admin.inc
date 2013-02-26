@@ -269,7 +269,7 @@ function advanced_sphinx_check_connection_page() {
       if (!empty($sphinx_results['matches'])) {
         $sphinx_match = array_shift($sphinx_results['matches']);
         $nid = $sphinx_match['node_id'];
-        $updated = '('. format_date($sphinx_match['created'], 'custom', 'd.m.Y H:i:s') .')';
+        $updated = '('. format_date($sphinx_match['changed'], 'custom', 'd.m.Y H:i:s') .')';
       }
       else {
         $nid = t('N/A - Oops! It apears that your Sphinx indexes are empty.');
