@@ -79,21 +79,22 @@ function advanced_sphinx_init() {
  */
 function advanced_sphinx_menu() {
   $items = array();
-  $items['admin/settings/advanced_sphinx'] = array(
+  $items['admin/config/search/advanced_sphinx'] = array(
     'title' => 'Sphinx search',
+    'description' => 'Administer Sphinx search module settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('advanced_sphinx_settings'),
     'access arguments' => array('administer advanced_sphinx'),
     'file' => 'advanced_sphinx.admin.inc',
   );
-  $items['admin/settings/advanced_sphinx/settings'] = array(
+  $items['admin/config/search/advanced_sphinx/settings'] = array(
     'title' => 'Settings',
     'description' => 'Administer Sphinx search module settings',
     'access arguments' => array('administer advanced_sphinx'),
     'weight' => -10,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/settings/advanced_sphinx/check-connection'] = array(
+  $items['admin/config/search/advanced_sphinx/check-connection'] = array(
     'title' => 'Check connection',
     'description' => 'Check connection to Sphinx searchd daemon',
     'page callback' => 'advanced_sphinx_check_connection_page',
