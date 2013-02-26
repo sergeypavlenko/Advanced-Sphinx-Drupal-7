@@ -17,16 +17,14 @@
   <?php print $result['stat']; ?> <?php print $result['word_stat']; ?>
 </p>
 <?php if($result['sorted']){ ?>
-<div class="search-sorted"><?php print t('Сортировка') . ': ' . $result['sorted']; ?></div>
+  <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php }; ?>
 <div id="advanced-search clear-block">
-
   <ul class="search-results">
     <?php print $result['result']; ?>
   </ul>
-
 </div>
 <?php if($result['sorted']){ ?>
-<div class="search-sorted"><?php print t('Сортировка') . ': ' . $result['sorted']; ?></div>
+  <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php }; ?>
 

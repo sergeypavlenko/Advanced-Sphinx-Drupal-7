@@ -101,7 +101,7 @@ function advanced_sphinx_search_form($form, &$form_state, $search_options = arra
 function advanced_sphinx_search_form_validate($form, &$form_state) {
   #drupal_set_message('<pre>'.print_r($search_options,1).'</pre>');
   if (empty($form_state['values']['keys'])) {
-      form_set_error('keys', 'Введите поисковый запрос в поле!');
+      form_set_error('keys', t('Enter search request in search field!'));
   }
 }
 
@@ -130,11 +130,11 @@ function theme_advanced_sphinx_search_results($variables) {
   if (!isset($result_wrapper['result'])){
   	$result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }
-  $result_wrapper['stat'] = format_plural($search_results['total_found'], 'Нашёлся 1 ответ', 'Нашлось @count ответов') . ' ' . t('за @seconds секунд.', array('@seconds' => round($search_results['time'], 3)));
+  $result_wrapper['stat'] = format_plural($search_results['total_found'], t('Found 1 result'), t('Found @count results')) . ' ' . t('on @seconds seconds.', array('@seconds' => round($search_results['time'], 3)));
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
-      $words[] = '<em>' . check_plain($word) . '</em> ('. t('ответов: @docs, повторений: @hits', array('@docs' => (int)$word_data['docs'], '@hits' => (int)$word_data['hits'])) . ')';
+      $words[] = '<em>' . check_plain($word) . '</em> ('. t('results: @docs, repeats: @hits', array('@docs' => (int)$word_data['docs'], '@hits' => (int)$word_data['hits'])) . ')';
     }
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
   }
@@ -154,9 +154,9 @@ function theme_advanced_sphinx_sorted_links($query, $sort = array()){
     'sor-changed'
   );
   $sort_title = array(
-    'Релевантность',
-    'Дата',
-    'Обновление'
+    t('Relevance'),
+    t('Date'),
+    t('Update')
   );
   $url = array();
   $sorted = '';

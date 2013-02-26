@@ -24,7 +24,7 @@ function advanced_sphinx_settings() {
   
   $form['server']['advanced_sphinx_generate_config'] = array(
     '#type' => 'checkbox', 
-    '#title' => 'Генерировать конфигурационный файл',
+    '#title' => t('Generate configuration file'),
     '#default_value' => variable_get('advanced_sphinx_generate_config', FALSE),
   );
   
@@ -133,13 +133,13 @@ function advanced_sphinx_settings() {
   
   $form['server']['advanced_sphinx_logs'] = array(
     '#type' => 'checkbox', 
-    '#title' => 'Вести лог запросов',
+    '#title' => t('Enable log for search requests'),
     '#default_value' => variable_get('advanced_sphinx_logs', TRUE),
   );
   
   $form['server']['advanced_sphinx_yandex'] = array(
     '#type' => 'checkbox', 
-    '#title' => 'Яндекс-Поиск',
+    '#title' => t('Yandex-search'),
     '#default_value' => variable_get('advanced_sphinx_yandex', FALSE),
   );
   
