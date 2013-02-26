@@ -197,10 +197,10 @@ function theme_advanced_sphinx_sorted_links($query, $sort = array()){
 function advanced_sphinx_get_items_result_main($search_options, $search_results) {
   $items_result = array();
   $result_wrapper = array('result' => '');
-  $i = 1;
+  $page = isset($_GET['page']) ? $_GET['page'] : 0;
   
   foreach ($search_results['nodes'] as $item_id => $node) {
-    $items_result['number'] = isset($_GET['page']) ? $i + ($_GET['page']+1) * $search_options['results_per_page'] : $i;
+    $items_result['number'] = $item_id + 1 + $page * $search_options['results_per_page'];
     $title = (isset($search_results['titles'][$item_id]) ? $search_results['titles'][$item_id] : check_plain($node->title));
     if (variable_get('advanced_sphinx_logs', TRUE)){
       $items_result['title'] = l($title, variable_get('advanced_sphinx_search_path', 'search-content').'/service/' . $node->nid, array('html' => TRUE));		
@@ -223,7 +223,6 @@ function advanced_sphinx_get_items_result_main($search_options, $search_results)
       $items_result['comment_count'] = $node->comment_count;
     }
     $result_wrapper['result'] .= theme('advanced_sphinx_items_result_main', array('result' => $items_result));
-    $i++;
   }
   return $result_wrapper;
 }
