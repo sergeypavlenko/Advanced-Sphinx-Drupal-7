@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Implementation of hook_menu().
  */
+
 /**
  * Load common module functions.
  */
@@ -34,12 +36,12 @@ function advanced_sphinx_theme() {
         'result' => array()
       ),
     ),
-  'advanced_sphinx_base_sphinx' => array(
-        'template' => 'advanced_sphinx_base_sphinx',
-        'variables' => array(
-          'config' => array()
+    'advanced_sphinx_base_sphinx' => array(
+      'template' => 'advanced_sphinx_base_sphinx',
+      'variables' => array(
+        'config' => array()
+      ),
     ),
-  ),
     'advanced_sphinx_sorted_links' => array(
       'variables' => array(
         'query' => NULL,
@@ -47,7 +49,6 @@ function advanced_sphinx_theme() {
     ),
   );
 }
-
 
 /**
  * Implementation of  hook_permission().
@@ -64,7 +65,6 @@ function advanced_sphinx_permission() {
   );
 }
 
-
 /**
  * Implementation of hook_init().
  */
@@ -72,7 +72,6 @@ function advanced_sphinx_init() {
   // We need our own CSS in all pages because of tagadelic and similar blocks.
   drupal_add_css(drupal_get_path('module', 'advanced_sphinx') . '/advanced_sphinx.css');
 }
-
 
 /**
  * Implementation of hook_menu().
@@ -110,7 +109,7 @@ function advanced_sphinx_menu() {
     'type' => MENU_SUGGESTED_ITEM,
     'file' => 'advanced_sphinx.pages.inc',
   );
-  $items[variable_get('advanced_sphinx_search_path', 'search-content').'/service/%'] = array(
+  $items[variable_get('advanced_sphinx_search_path', 'search-content') . '/service/%'] = array(
     'title' => 'Service',
     'page callback' => 'advanced_sphinx_log',
     'page arguments' => array(2),
@@ -118,7 +117,6 @@ function advanced_sphinx_menu() {
   );
   return $items;
 }
-
 
 /**
  * Implementation of hook_block_info().
@@ -138,23 +136,22 @@ function advanced_sphinx_block_info() {
  */
 function advanced_sphinx_block_view($delta = '') {
   $blocks = array();
-  switch($delta) {
+  switch ($delta) {
     case 'searchbox':
       if (!user_access('use advanced_sphinx') || advanced_sphinx_flood_limit_exceeded()) {
         return;
       }
       if (!advanced_sphinx_is_search_path()) {
-         return array(
-           'subject' => t('Search'),
-           'content' => drupal_get_form('advanced_sphinx_search_box'),
-         );
-       }
+        return array(
+          'subject' => t('Search'),
+          'content' => drupal_get_form('advanced_sphinx_search_box'),
+        );
+      }
       break;
   }
 
   return $blocks;
 }
-
 
 /**
  * Render a search box form.
@@ -169,9 +166,9 @@ function advanced_sphinx_search_box() {
   $form['inline']['keys'] = array(
     '#type' => 'textfield',
     '#default_value' => '',
-    '#maxlength' => 600, 
+    '#maxlength' => 600,
     '#attributes' => array(
-	  'title' => t('Enter the terms you wish to search for.'),
+      'title' => t('Enter the terms you wish to search for.'),
       'class' => array('search-sphinx'),
     ),
   );
@@ -181,7 +178,6 @@ function advanced_sphinx_search_box() {
   );
   return $form;
 }
-
 
 /**
  * Process a search box form submission.
@@ -195,7 +191,6 @@ function advanced_sphinx_search_box_submit($form, &$form_state) {
   // Transform POST into a GET request.
   advanced_sphinx_goto_search($query);
 }
-
 
 /**
  * Obtain PHP memory_limit.
@@ -212,13 +207,13 @@ function advanced_sphinx_get_memory_limit() {
   }
   $memory_limit = trim(@ini_get('memory_limit'));
   if (is_numeric($memory_limit)) {
-    $memory_limit = (int)$memory_limit;
+    $memory_limit = (int) $memory_limit;
   }
   else {
     if (!preg_match('#([0-9]+)(K|M|G)#', strtoupper($memory_limit), $matches)) {
       return -1;
     }
-    $memory_limit = (int)$matches[1];
+    $memory_limit = (int) $matches[1];
     switch ($matches[2]) {
       case 'G':
         $memory_limit *= 1024;
@@ -230,7 +225,6 @@ function advanced_sphinx_get_memory_limit() {
   }
   return $memory_limit;
 }
-
 
 /**
  * Obtain the text representation of a node.
@@ -282,7 +276,7 @@ function advanced_sphinx_get_node_text(&$node, $build_mode) {
 //TODO D7
 function advanced_sphinx_get_node_text_fast(&$node) {
   $text = $node->body_value;
-  
+
   // Strip off all tags, but insert space before/after them to keep word boundaries.
   $text = str_replace(array('<', '>', '[', ']'), array(' <', '> ', ' ', ' '), $text);
   $text = preg_replace('#<(script|style)[^>]*>.*</\1>#s', ' ', $text);
@@ -294,28 +288,25 @@ function advanced_sphinx_get_node_text_fast(&$node) {
   return $text;
 }
 
-
 function advanced_sphinx_get_node_count($nid) {
   $result = new stdClass;
   $result->comment_count = db_select('comment', 'comment')
-    ->condition('nid', $nid, '=')
-    ->countQuery()
-    ->execute()
-    ->fetchField();
-  return $result;	
+      ->condition('nid', $nid, '=')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+  return $result;
 }
-
 
 function advanced_sphinx_get_data_sphinxmain($nid) {
   $result = db_select('sphinxmain', 'sphinx')
-    ->fields('sphinx')
-    ->condition('nid', $nid, '=')
-    ->execute()
-    ->fetchObject();
-  
-  return $result; 
-}
+      ->fields('sphinx')
+      ->condition('nid', $nid, '=')
+      ->execute()
+      ->fetchObject();
 
+  return $result;
+}
 
 function advanced_sphinx_get_node_info($nid) {
   $result = advanced_sphinx_get_data_sphinxmain($nid);
@@ -325,58 +316,55 @@ function advanced_sphinx_get_node_info($nid) {
   }
   //TODO in D7
   //$result->taxonomy = taxonomy_node_get_terms($result);
-  return $result;	
+  return $result;
 }
 
-
-function advanced_sphinx_log($nid){
+function advanced_sphinx_log($nid) {
   $keyword = variable_get('advanced_sphinx_keys', '');
-  if ($keyword){
+  if ($keyword) {
     $count = db_select('advanced_sphinx_logs', 'logs')
-      ->fields('logs', array('counter'))
-      ->condition('nid', $nid, '=')
-      ->condition('keyword', $keyword, '=')
-      ->execute()
-      ->fetchField();
-      
+        ->fields('logs', array('counter'))
+        ->condition('nid', $nid, '=')
+        ->condition('keyword', $keyword, '=')
+        ->execute()
+        ->fetchField();
+
     $count = $count ? $count : 0;
-    if ($count == 0){
+    if ($count == 0) {
       db_insert('advanced_sphinx_logs')
-        ->fields(array('keyword'=>$keyword, 'nid'=>$nid, 'counter'=>1))
-        ->execute();
+          ->fields(array('keyword' => $keyword, 'nid' => $nid, 'counter' => 1))
+          ->execute();
     }
     else {
       db_update('advanced_sphinx_logs')
-        ->fields('counter', $count+1)
-        ->condition('nid', $nid, '=')
-        ->condition('keyword', $keyword, '=')
-        ->execute();
+          ->fields('counter', $count + 1)
+          ->condition('nid', $nid, '=')
+          ->condition('keyword', $keyword, '=')
+          ->execute();
     }
   }
-  drupal_goto('node/'.$nid);
+  drupal_goto('node/' . $nid);
 }
 
-
-function advanced_sphinx_create_config_dir(){
+function advanced_sphinx_create_config_dir() {
   watchdog('advanced_sphinx', '1', NULL, WATCHDOG_WARNING);
   $dir = variable_get('advanced_sphinx_path_config', conf_path() . '/sphinx');
-  if (variable_get('advanced_sphinx_generate_config', FALSE) == 1){
+  if (variable_get('advanced_sphinx_generate_config', FALSE) == 1) {
     watchdog('advanced_sphinx', '2', NULL, WATCHDOG_WARNING);
     if (!file_prepare_directory($dir, 0)) {
       watchdog('advanced_sphinx', '3', NULL, WATCHDOG_WARNING);
-      $mask = 755; 
+      $mask = 755;
       advanced_sphinx_mkdir($dir, $mask, TRUE);
       advanced_sphinx_mkdir($dir . '/index', $mask, TRUE);
       advanced_sphinx_mkdir($dir . '/log', $mask, TRUE);
       advanced_sphinx_create_config_file($dir);
     }
-    else{
+    else {
       watchdog('advanced_sphinx', '5', NULL, WATCHDOG_WARNING);
       advanced_sphinx_create_config_file($dir);
     }
   }
 }
-
 
 function advanced_sphinx_create_config_file($dir) {
   watchdog('advanced_sphinx', '6', NULL, WATCHDOG_WARNING);
@@ -392,7 +380,6 @@ function advanced_sphinx_create_config_file($dir) {
   watchdog('advanced_sphinx', '8', NULL, WATCHDOG_WARNING);
 }
 
-
 function advanced_sphinx_get_config_content($dir_path = NULL) {
   global $databases;
   $settings = $databases['default']['default'];
@@ -405,7 +392,7 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
   $config['index_delta'] = $dir_path . '/index/delta' . " \n";
   $config['sql_host'] = $settings['host'] . " \n";
   $config['sql_user'] = $settings['username'] . " \n";
-  $config['sql_pass'] = $settings['password']." \n";
+  $config['sql_pass'] = $settings['password'] . " \n";
   $config['sql_db'] = $settings['database'] . " \n";
   //TODO sql port isset D7
   //TODO protocol for sphinf.conf
@@ -420,12 +407,12 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
     watchdog('advanced_sphinx', '11', NULL, WATCHDOG_WARNING);
   }
   elseif (variable_get('advanced_sphinx_connections_type', 'socket') == 'port') {
-    $config['listen'] = variable_get('advanced_sphinx_searchd_host', realpath(conf_path()) . '/sphinx/sphinx.s'). ':' . variable_get('advanced_sphinx_searchd_port', '3306') . " \n";
+    $config['listen'] = variable_get('advanced_sphinx_searchd_host', realpath(conf_path()) . '/sphinx/sphinx.s') . ':' . variable_get('advanced_sphinx_searchd_port', '3306') . " \n";
     watchdog('advanced_sphinx', '10', NULL, WATCHDOG_WARNING);
   }
-  
+
   watchdog('advanced_sphinx', '10', NULL, WATCHDOG_WARNING);
-  
+
   $config_content = theme('advanced_sphinx_base_sphinx', array('config' => $config));
   watchdog('advanced_sphinx', '12', NULL, WATCHDOG_WARNING);
   return $config_content;

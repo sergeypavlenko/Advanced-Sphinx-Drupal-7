@@ -1,4 +1,5 @@
 <?php
+
 // $Id: advanced_sphinx.common.inc, v 1.0 2011/07/05 19:59:16 gagaga Exp $
 /**
  * @file
@@ -8,14 +9,12 @@
  * future versions with no backwards compatibility. I should probably create a
  * sample module before it gets into something really reusable... and useful.
  */
-
 /**
  * List of supported search matching modes.
  */
 define('advanced_sphinx_MATCH_ALL', 0);
 define('advanced_sphinx_MATCH_ANY', 1);
 define('advanced_sphinx_MATCH_PHRASE', 2);
-
 
 /**
  * Check if specified path is the Sphinx search page.
@@ -81,21 +80,21 @@ function &advanced_sphinx_get_client() {
     require_once(drupal_get_path('module', 'advanced_sphinx') . '/lib/sphinxapi.php');
 
     $advanced_sphinx = new SphinxClient();
-    $advanced_sphinx->SetServer(variable_get('advanced_sphinx_searchd_host', 'localhost'), (int)variable_get('advanced_sphinx_searchd_port', '3312'));
+    $advanced_sphinx->SetServer(variable_get('advanced_sphinx_searchd_host', 'localhost'), (int) variable_get('advanced_sphinx_searchd_port', '3312'));
     $advanced_sphinx->SetLimits(0, 30, 500);
     // Setup connection timeout?
-    if (($advanced_sphinx_searchd_timeout = (int)variable_get('advanced_sphinx_searchd_timeout', 0)) > 0) {
+    if (($advanced_sphinx_searchd_timeout = (int) variable_get('advanced_sphinx_searchd_timeout', 0)) > 0) {
       $advanced_sphinx->SetConnectTimeout($advanced_sphinx_searchd_timeout);
     }
 
     // Setup max query time?
-    if (($advanced_sphinx_searchd_maxquerytime = (int)variable_get('advanced_sphinx_searchd_maxquerytime', 0)) > 0) {
+    if (($advanced_sphinx_searchd_maxquerytime = (int) variable_get('advanced_sphinx_searchd_maxquerytime', 0)) > 0) {
       $advanced_sphinx->SetMaxQueryTime($advanced_sphinx_searchd_maxquerytime * 1000);
     }
 
     // Setup distributed retries?
-    if (($advanced_sphinx_retries_count = (int)variable_get('advanced_sphinx_retries_count', 0)) > 0) {
-      $advanced_sphinx_retries_delay = (int)variable_get('advanced_sphinx_retries_delay', 0);
+    if (($advanced_sphinx_retries_count = (int) variable_get('advanced_sphinx_retries_count', 0)) > 0) {
+      $advanced_sphinx_retries_delay = (int) variable_get('advanced_sphinx_retries_delay', 0);
       $advanced_sphinx->SetRetries($advanced_sphinx_retries_count, $advanced_sphinx_retries_delay * 1000);
     }
   }
@@ -122,24 +121,24 @@ function advanced_sphinx_check_connection() {
  */
 function advanced_sphinx_get_query_string($search_options) {
   $query = array();
-  foreach($search_options as $key => $value){
-  	if ($key == 'keys'){
-  	  $query[$key] = $value;
-  	}
-  	else if ($key == 'filters'){
-  	  foreach($search_options['filters'] as $fil => $fval){
-  	  	$val = implode(',', $fval);
-  	  	$query['fil-'.$fil] = $val;
-  	  }
-  	}
-  	else if ($key == 'view' || $key == 'group'){
-  	  $query[$key] = $value;
-  	}
-    else if ($key == 'sorted'){
-    foreach($search_options['sorted'] as $sort => $sval){
-  	  	$query['sor-'.$sort] = $sval;
-  	  }
-  	}
+  foreach ($search_options as $key => $value) {
+    if ($key == 'keys') {
+      $query[$key] = $value;
+    }
+    else if ($key == 'filters') {
+      foreach ($search_options['filters'] as $fil => $fval) {
+        $val = implode(',', $fval);
+        $query['fil-' . $fil] = $val;
+      }
+    }
+    else if ($key == 'view' || $key == 'group') {
+      $query[$key] = $value;
+    }
+    else if ($key == 'sorted') {
+      foreach ($search_options['sorted'] as $sort => $sval) {
+        $query['sor-' . $sort] = $sval;
+      }
+    }
   }
   return $query;
 }
@@ -155,27 +154,27 @@ function advanced_sphinx_get_query_string($search_options) {
 function advanced_sphinx_parse_request($request_options = array()) {
   $search_options = array(
     'matchmode' => advanced_sphinx_MATCH_ALL,
-    'results_per_page' => (int)variable_get('advanced_sphinx_results_per_page', 25),
-    'excerpts_limit' => (int)variable_get('advanced_sphinx_excerpts_limit', 256),
-    'excerpts_around' => (int)variable_get('advanced_sphinx_excerpts_around', 5),
-    'excerpts_single_passage' => (int)variable_get('advanced_sphinx_excerpts_single_passage', 0),
+    'results_per_page' => (int) variable_get('advanced_sphinx_results_per_page', 25),
+    'excerpts_limit' => (int) variable_get('advanced_sphinx_excerpts_limit', 256),
+    'excerpts_around' => (int) variable_get('advanced_sphinx_excerpts_around', 5),
+    'excerpts_single_passage' => (int) variable_get('advanced_sphinx_excerpts_single_passage', 0),
     'errors' => array(),
   );
-  foreach($request_options as $key => $value){
-  	if ($key=='keys'){
-  	  $search_options[$key] = preg_replace('#\s+#', ' ', trim($value));
-  	}
-  	else if (strstr($key, 'fil-') != FALSE){
-  	  $key = str_replace("fil-", "", $key);
-  	  $search_options['filters'][$key] = explode(',', $value);
-  	}
-  	else if ($key == 'view' || $key == 'group'){
-  	  $search_options[$key]	= $value;
-  	}
-  	else if(strstr($key, 'sor-') != FALSE){
-  	  $key = str_replace("sor-", "", $key);
-  	  $search_options['sorted'][$key] = $value;
-  	}
+  foreach ($request_options as $key => $value) {
+    if ($key == 'keys') {
+      $search_options[$key] = preg_replace('#\s+#', ' ', trim($value));
+    }
+    else if (strstr($key, 'fil-') != FALSE) {
+      $key = str_replace("fil-", "", $key);
+      $search_options['filters'][$key] = explode(',', $value);
+    }
+    else if ($key == 'view' || $key == 'group') {
+      $search_options[$key] = $value;
+    }
+    else if (strstr($key, 'sor-') != FALSE) {
+      $key = str_replace("sor-", "", $key);
+      $search_options['sorted'][$key] = $value;
+    }
   }
   return $search_options;
 }
@@ -204,10 +203,10 @@ function advanced_sphinx_execute_query($search_options) {
   //drupal_set_message('<pre>'.check_plain(print_r($search_options,1)).'</pre>');
   $sphinx_query_keywords = array($search_options['keys']);
   // Obtain distributed index name, required to resolve search query.
-  if(!variable_get('advanced_sphinx_query_index_delta', '')){
-  $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '');
+  if (!variable_get('advanced_sphinx_query_index_delta', '')) {
+    $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '');
   }
-  else{
+  else {
     $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '') . ',' . variable_get('advanced_sphinx_query_index_delta', '');
   }
   if (empty($advanced_sphinx_query_index)) {
@@ -238,32 +237,30 @@ function advanced_sphinx_execute_query($search_options) {
   $advanced_sphinx->SetMatchMode(SPH_MATCH_EXTENDED2);
   $advanced_sphinx->SetRankingMode(SPH_RANK_MATCHANY);
   #$advanced_sphinx->SetRankingMode(SPH_RANK_PROXIMITY_BM25);
-  
-  
   #$advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');
   // Sort options.
-  if(isset($search_options['sorted'])){
-    foreach($search_options['sorted'] as $key => $value){
-  	  if ($key == 'relevance'){
-  	    $advanced_sphinx->SetSortMode(SPH_SORT_EXPR, '@weight + ( countitl - ' . count($search_options['keys']) . ')*(-0.1)');
-  	  }
-  	  else {
-  	    $advanced_sphinx->SetSortMode(SPH_SORT_EXTENDED, $key . ' ' . $value);
-  	  }
+  if (isset($search_options['sorted'])) {
+    foreach ($search_options['sorted'] as $key => $value) {
+      if ($key == 'relevance') {
+        $advanced_sphinx->SetSortMode(SPH_SORT_EXPR, '@weight + ( countitl - ' . count($search_options['keys']) . ')*(-0.1)');
+      }
+      else {
+        $advanced_sphinx->SetSortMode(SPH_SORT_EXTENDED, $key . ' ' . $value);
+      }
     }
   }
-  else{
-  	$advanced_sphinx->SetSortMode(SPH_SORT_EXPR, '@weight + ( countitl - ' . count($search_options['keys']) . ')*(-0.1)');
+  else {
+    $advanced_sphinx->SetSortMode(SPH_SORT_EXPR, '@weight + ( countitl - ' . count($search_options['keys']) . ')*(-0.1)');
   }
   $advanced_sphinx->SetArrayResult(TRUE);
-  
-  if(isset($search_options['filters'])){
-    foreach($search_options['filters'] as $key => $value){
+
+  if (isset($search_options['filters'])) {
+    foreach ($search_options['filters'] as $key => $value) {
       $advanced_sphinx->SetFilter($key, $value, $exclude = FALSE);
     }
   }
   // Grouping options.
-  if(isset($search_options['group'])){
+  if (isset($search_options['group'])) {
     $advanced_sphinx->SetGroupBy($search_options['group'], SPH_GROUPBY_ATTR, $groupsort = "@group desc");
   }
 
@@ -273,14 +270,14 @@ function advanced_sphinx_execute_query($search_options) {
   if (!$sphinx_results) {
     $message = $advanced_sphinx->GetLastError();
     if (!advanced_sphinx_check_connection()) {
-      $message=$advanced_sphinx->IsConnectError();
+      $message = $advanced_sphinx->IsConnectError();
       $search_results['error_message'] = t('Search service is disabled temporarily. Please, try again later.') . $message;
       return $search_results;
     }
     $search_results['error_message'] = t('Search failed using index %index. Sphinx error: %message', array(
       '%index' => $advanced_sphinx_query_index,
       '%message' => $message,
-    ));
+        ));
     return $search_results;
   }
   $message = $advanced_sphinx->GetLastWarning();
@@ -291,14 +288,14 @@ function advanced_sphinx_execute_query($search_options) {
     return $search_results;
   }
   // Save Sphinx query results.
-  $search_results['total_found'] = (int)$sphinx_results['total_found'];
-  $search_results['total_available'] = (int)$sphinx_results['total'];
+  $search_results['total_found'] = (int) $sphinx_results['total_found'];
+  $search_results['total_available'] = (int) $sphinx_results['total'];
   $search_results['time'] = $sphinx_results['time'];
   $search_results['words'] = (isset($sphinx_results['words']) && is_array($sphinx_results['words']) ? $sphinx_results['words'] : array());
 
 //drupal_set_message('<pre>'.check_plain(print_r($sphinx_results['matches'],1)).'</pre>');
 // Load nodes referenced by returned results.
- 
+
   foreach ($sphinx_results['matches'] as $id => $sphinx_match) {
     //drupal_set_message('<pre>'.check_plain(print_r($sphinx_docid,1)).'</pre>');
     //drupal_set_message('<pre>'.check_plain(print_r($sphinx_match,1)).'</pre>');\
@@ -309,36 +306,35 @@ function advanced_sphinx_execute_query($search_options) {
     }
   }
   // Use Sphinx to build excerpts.
-
-    // Build node titles with highlighted keywords.
-    $search_results['titles'] = $advanced_sphinx->BuildExcerpts($search_results['titles'], $advanced_sphinx_excerpts_index, $sphinx_excerpt_keywords, array(
-      'before_match' => '<b>',
-      'after_match' => '</b>',
-      'chunk_separator' => '',
-      'limit' => 1024, // We want all text here, so using a high enough number.
-      'around' => 200, // Ignored when single_passage is TRUE.
-      'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
-      'single_passage' => TRUE,
-    ));
-    // drupal_set_message('<pre>'.check_plain(print_r($search_results,1)).'</pre>');
-    if (!$search_results['titles']) {
-      $search_results['titles'] = array();
-      $search_results['warnings'][] = t('Unable to build excerpts for content titles. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
-    }
-    // Build node excerpts with highlighted keywords.
-    $search_results['excerpts'] = $advanced_sphinx->BuildExcerpts($search_results['excerpts'], $advanced_sphinx_excerpts_index, $sphinx_excerpt_keywords, array(
-      'before_match' => '<b>',
-      'after_match' => '</b>',
-      'chunk_separator' => '<span class="search-chunk-separator"> ... </span>',
-      'limit' => $search_options['excerpts_limit'],
-      'around' => $search_options['excerpts_around'],
-      'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
-      'single_passage' => $search_options['excerpts_single_passage'],
-    ));
-    if (!$search_results['excerpts']) {
-      $search_results['excerpts'] = array();
-      $search_results['warnings'][] = t('Unable to build excerpts for content snippets. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
-    }
+  // Build node titles with highlighted keywords.
+  $search_results['titles'] = $advanced_sphinx->BuildExcerpts($search_results['titles'], $advanced_sphinx_excerpts_index, $sphinx_excerpt_keywords, array(
+    'before_match' => '<b>',
+    'after_match' => '</b>',
+    'chunk_separator' => '',
+    'limit' => 1024, // We want all text here, so using a high enough number.
+    'around' => 200, // Ignored when single_passage is TRUE.
+    'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
+    'single_passage' => TRUE,
+      ));
+  // drupal_set_message('<pre>'.check_plain(print_r($search_results,1)).'</pre>');
+  if (!$search_results['titles']) {
+    $search_results['titles'] = array();
+    $search_results['warnings'][] = t('Unable to build excerpts for content titles. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
+  }
+  // Build node excerpts with highlighted keywords.
+  $search_results['excerpts'] = $advanced_sphinx->BuildExcerpts($search_results['excerpts'], $advanced_sphinx_excerpts_index, $sphinx_excerpt_keywords, array(
+    'before_match' => '<b>',
+    'after_match' => '</b>',
+    'chunk_separator' => '<span class="search-chunk-separator"> ... </span>',
+    'limit' => $search_options['excerpts_limit'],
+    'around' => $search_options['excerpts_around'],
+    'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
+    'single_passage' => $search_options['excerpts_single_passage'],
+      ));
+  if (!$search_results['excerpts']) {
+    $search_results['excerpts'] = array();
+    $search_results['warnings'][] = t('Unable to build excerpts for content snippets. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
+  }
   //drupal_set_message('<pre>'.check_plain(print_r($search_results,1)).'</pre>');
   return $search_results;
 }
@@ -353,7 +349,7 @@ function advanced_sphinx_execute_query($search_options) {
  */
 function advanced_sphinx_get_current_page($pager_element = 0) {
   $pager_page_array = (isset($_GET['page']) ? explode(',', $_GET['page']) : array());
-  return (isset($pager_page_array[$pager_element]) ? (int)$pager_page_array[$pager_element] : 0);
+  return (isset($pager_page_array[$pager_element]) ? (int) $pager_page_array[$pager_element] : 0);
 }
 
 /**
@@ -369,10 +365,10 @@ function advanced_sphinx_get_current_page($pager_element = 0) {
  * @return string
  */
 function advanced_sphinx_pager($total_results, $results_per_page, $pager_element = 0) {
-  $page = isset($_GET['page']) ? $_GET['page']: NULL;
+  $page = isset($_GET['page']) ? $_GET['page'] : NULL;
   $GLOBALS['pager_page_array'] = explode(',', $page);
   $GLOBALS['pager_total_items'][$pager_element] = $total_results;
   $GLOBALS['pager_total'][$pager_element] = ceil($total_results / $results_per_page);
-  $GLOBALS['pager_page_array'][$pager_element] = max(0, min((int)$GLOBALS['pager_page_array'][$pager_element], ((int)$GLOBALS['pager_total'][$pager_element]) - 1));
+  $GLOBALS['pager_page_array'][$pager_element] = max(0, min((int) $GLOBALS['pager_page_array'][$pager_element], ((int) $GLOBALS['pager_total'][$pager_element]) - 1));
   return theme('pager');
 }
