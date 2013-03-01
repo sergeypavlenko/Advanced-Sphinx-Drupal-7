@@ -122,12 +122,18 @@ function advanced_sphinx_search_form_submit($form, &$form_state) {
 }
 
 function theme_advanced_sphinx_search_results($variables) {
-  #drupal_set_message('<pre>'.print_r($search_options,1).'</pre>');
-  #drupal_set_message('<pre>' . print_r($search_results,1) . '</pre>');
   // Display information about query execution.
   $output = '';
   extract($variables);
   // Display list of formatted search results.
+  if ($search_results['error_message']) {
+    drupal_set_message($search_results['error_message'], 'error');
+  }
+  
+  if ($search_results['warnings']) {
+    drupal_set_message($search_results['warnings'], 'warnings');
+  }
+  
   if (!isset($result_wrapper['result'])) {
     $result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }

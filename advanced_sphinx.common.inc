@@ -267,8 +267,9 @@ function advanced_sphinx_execute_query($search_options) {
   if (!$sphinx_results) {
     $message = $advanced_sphinx->GetLastError();
     if (!advanced_sphinx_check_connection()) {
-      $message = $advanced_sphinx->IsConnectError();
-      $search_results['error_message'] = t('Search service is disabled temporarily. Please, try again later.') . $message;
+      $advanced_sphinx->GetLastError();
+      watchdog('advanced_sphinx', $message, array(), WATCHDOG_ERROR);
+      $search_results['error_message'] = t('Search service is disabled temporarily. Please, try again later.');
       return $search_results;
     }
     $search_results['error_message'] = t('Search failed using index %index. Sphinx error: %message', array(
