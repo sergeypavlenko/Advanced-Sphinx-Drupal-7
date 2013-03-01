@@ -318,21 +318,18 @@ function advanced_sphinx_log($nid) {
  */
 function advanced_sphinx_create_config_dir() {
   watchdog('advanced_sphinx', '1', NULL, WATCHDOG_WARNING);
-  $dir = variable_get('advanced_sphinx_path_config', conf_path() . '/sphinx');
   if (variable_get('advanced_sphinx_generate_config', FALSE) == 1) {
     watchdog('advanced_sphinx', '2', NULL, WATCHDOG_WARNING);
-    if (!file_prepare_directory($dir, 0)) {
-      watchdog('advanced_sphinx', '3', NULL, WATCHDOG_WARNING);
-      $mask = 755;
-      advanced_sphinx_mkdir($dir, $mask, TRUE);
-      advanced_sphinx_mkdir($dir . '/index', $mask, TRUE);
-      advanced_sphinx_mkdir($dir . '/log', $mask, TRUE);
-      advanced_sphinx_create_config_file($dir);
-    }
-    else {
-      watchdog('advanced_sphinx', '5', NULL, WATCHDOG_WARNING);
-      advanced_sphinx_create_config_file($dir);
-    }
+    $path_config = variable_get('advanced_sphinx_path_config', conf_path() . '/sphinx');
+    $dirs = array(
+      'home' => $path_config,
+      'index' => "$path_config/index",
+      'log' => "$path_config/log",
+    );
+    file_prepare_directory($dirs['home'], FILE_CREATE_DIRECTORY);
+    file_prepare_directory($dirs['index'], FILE_CREATE_DIRECTORY);
+    file_prepare_directory($dirs['log'], FILE_CREATE_DIRECTORY);
+    advanced_sphinx_create_config_file($dirs['home']);
   }
 }
 
@@ -393,17 +390,4 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
   $config_content = theme('advanced_sphinx_base_sphinx', array('config' => $config));
   watchdog('advanced_sphinx', '12', NULL, WATCHDOG_WARNING);
   return $config_content;
-}
-
-
-/**
- * Create directory
- */
-function advanced_sphinx_mkdir($file, $mask, $message = TRUE) {
-  if (@mkdir($file, intval("0$mask", 8))) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
 }
