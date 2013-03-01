@@ -1,9 +1,4 @@
 <?php
-
-/**
- * Implementation of hook_menu().
- */
-
 /**
  * Load common module functions.
  */
@@ -226,54 +221,10 @@ function advanced_sphinx_get_memory_limit() {
   return $memory_limit;
 }
 
+
 /**
- * Obtain the text representation of a node.
- * All HTML is removed.
- *
- * @param object reference $node
- *   Node reference to extract text from.
- * @param int $build_mode
- *   One of the following node build modes:
- *   - NODE_BUILD_SEARCH_INDEX : Used by the indexer (XMLPipe processing).
- *   - NODE_BUILD_SEARCH_RESULT: Used to build excerpts in search results.
- * @return string
- *   Text representation of the node.
+ * Filter body value to plain text
  */
-//TODO D7
-function advanced_sphinx_get_node_text(&$node, $build_mode) {
-  // Build the node body.
-  $node->build_mode = $build_mode;
-  $node = node_build_content($node, FALSE, FALSE);
-  $node->body = drupal_render($node->content);
-
-  // Allow modules to modify the fully-built node.
-  node_invoke_nodeapi($node, 'alter');
-
-  $text = $node->body;
-
-  // Fetch extra data normally not visible
-  $extra = node_invoke_nodeapi($node, 'update index');
-  foreach ($extra as $t) {
-    $text .= $t;
-  }
-  unset($extra, $t);
-
-  // Strip control characters that aren't valid in XML.
-  $text = advanced_sphinx_strip_invalid_xml_codes($text);
-
-  // Strip off all tags, but insert space before/after them to keep word boundaries.
-  $text = str_replace(array('<', '>', '[', ']'), array(' <', '> ', ' ', ' '), $text);
-  $text = preg_replace('#<(script|style)[^>]*>.*</\1>#s', ' ', $text);
-  $text = strip_tags($text);
-
-  // Reduce size a little removing redudant spaces and line breaks.
-  $text = preg_replace("# +#", ' ', $text);
-  $text = preg_replace("#(\s*)\n+#", "\n", $text);
-
-  return $text;
-}
-
-//TODO D7
 function advanced_sphinx_get_node_text_fast(&$node) {
   $text = $node->body_value;
 
@@ -288,6 +239,9 @@ function advanced_sphinx_get_node_text_fast(&$node) {
   return $text;
 }
 
+/**
+ * Count comments for node
+ */
 function advanced_sphinx_get_node_count($nid) {
   $result = new stdClass;
   $result->comment_count = db_select('comment', 'comment')
@@ -298,6 +252,10 @@ function advanced_sphinx_get_node_count($nid) {
   return $result;
 }
 
+
+/**
+ * Get results from sphinxmain view for node
+ */
 function advanced_sphinx_get_data_sphinxmain($nid) {
   $result = db_select('sphinxmain', 'sphinx')
       ->fields('sphinx')
@@ -308,6 +266,10 @@ function advanced_sphinx_get_data_sphinxmain($nid) {
   return $result;
 }
 
+
+/**
+ * Return information about node
+ */
 function advanced_sphinx_get_node_info($nid) {
   $result = advanced_sphinx_get_data_sphinxmain($nid);
   if (module_exists('comment')) {
@@ -319,6 +281,10 @@ function advanced_sphinx_get_node_info($nid) {
   return $result;
 }
 
+
+/**
+ * Insert data in sphinx log and redirect to node
+ */
 function advanced_sphinx_log($nid) {
   $keyword = variable_get('advanced_sphinx_keys', '');
   if ($keyword) {
@@ -346,6 +312,10 @@ function advanced_sphinx_log($nid) {
   drupal_goto('node/' . $nid);
 }
 
+
+/**
+ * Create directory hierachy for sphinx config and sphinx config file if access available
+ */
 function advanced_sphinx_create_config_dir() {
   watchdog('advanced_sphinx', '1', NULL, WATCHDOG_WARNING);
   $dir = variable_get('advanced_sphinx_path_config', conf_path() . '/sphinx');
@@ -366,6 +336,10 @@ function advanced_sphinx_create_config_dir() {
   }
 }
 
+
+/**
+ * Create sphinx config file if access available
+ */
 function advanced_sphinx_create_config_file($dir) {
   watchdog('advanced_sphinx', '6', NULL, WATCHDOG_WARNING);
   $dir_path = realpath($dir);
@@ -380,6 +354,9 @@ function advanced_sphinx_create_config_file($dir) {
   watchdog('advanced_sphinx', '8', NULL, WATCHDOG_WARNING);
 }
 
+/**
+ * Generate sphinx config
+ */
 function advanced_sphinx_get_config_content($dir_path = NULL) {
   global $databases;
   $settings = $databases['default']['default'];
@@ -418,6 +395,10 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
   return $config_content;
 }
 
+
+/**
+ * Create directory
+ */
 function advanced_sphinx_mkdir($file, $mask, $message = TRUE) {
   if (@mkdir($file, intval("0$mask", 8))) {
     return TRUE;
