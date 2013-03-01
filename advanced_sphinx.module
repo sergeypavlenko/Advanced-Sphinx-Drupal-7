@@ -317,9 +317,7 @@ function advanced_sphinx_log($nid) {
  * Create directory hierachy for sphinx config and sphinx config file if access available
  */
 function advanced_sphinx_create_config_dir() {
-  watchdog('advanced_sphinx', '1', NULL, WATCHDOG_WARNING);
   if (variable_get('advanced_sphinx_generate_config', FALSE) == 1) {
-    watchdog('advanced_sphinx', '2', NULL, WATCHDOG_WARNING);
     $path_config = variable_get('advanced_sphinx_path_config', conf_path() . '/sphinx');
     $dirs = array(
       'home' => $path_config,
@@ -338,17 +336,12 @@ function advanced_sphinx_create_config_dir() {
  * Create sphinx config file if access available
  */
 function advanced_sphinx_create_config_file($dir) {
-  watchdog('advanced_sphinx', '6', NULL, WATCHDOG_WARNING);
   $dir_path = realpath($dir);
   $file = $dir_path . '/sphinx.conf';
   if (file_prepare_directory($dir_path) && !file_exists($file)) {
-    watchdog('advanced_sphinx', '7', NULL, WATCHDOG_WARNING);
     $config_content = advanced_sphinx_get_config_content($dir_path);
-    watchdog('advanced_sphinx', $config_content, NULL, WATCHDOG_WARNING);
     $inf = file_put_contents($dir_path . '/sphinx.conf', $config_content);
-    watchdog('advanced_sphinx', $inf, NULL, WATCHDOG_WARNING);
   }
-  watchdog('advanced_sphinx', '8', NULL, WATCHDOG_WARNING);
 }
 
 /**
@@ -357,7 +350,6 @@ function advanced_sphinx_create_config_file($dir) {
 function advanced_sphinx_get_config_content($dir_path = NULL) {
   global $databases;
   $settings = $databases['default']['default'];
-  watchdog('advanced_sphinx', '9', NULL, WATCHDOG_WARNING);
   $config = array();
   $config['log'] = $dir_path . '/log/searchd.log' . " \n";
   $config['query_log'] = $dir_path . '/log/query.log' . " \n";
@@ -368,8 +360,6 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
   $config['sql_user'] = $settings['username'] . " \n";
   $config['sql_pass'] = $settings['password'] . " \n";
   $config['sql_db'] = $settings['database'] . " \n";
-  //TODO sql port isset D7
-  //TODO protocol for sphinf.conf
   $config['sql_port'] = isset($settings['port']) ? $settings['port'] . " \n" : variable_get('advanced_sphinx_searchd_port', '3306') . " \n";
   $config['charset_table'] = '0..9, A..Z->a..z, _, a..z, U+410..U+42F->U+430..U+44F, U+430..U+44F' . " \n";
   $config['sql_query_pre_source_main'] = "REPLACE INTO {$settings['prefix']}advanced_sphinx_livup SELECT 1, MAX(nid) FROM {$settings['prefix']}node \n";
@@ -378,16 +368,11 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
   $config['sql_query_source_delta'] = "SELECT nid, nid as node_id, title, body_value, created, changed, countitl FROM {$settings['prefix']}sphinxmain WHERE nid > ( SELECT max_doc_id FROM {$settings['prefix']}advanced_sphinx_livup WHERE counter_id = 1 ) \n";
   if (variable_get('advanced_sphinx_connections_type', 'socket') == 'socket') {
     $config['listen'] = $dir_path . '/sphinx.s' . " \n";
-    watchdog('advanced_sphinx', '11', NULL, WATCHDOG_WARNING);
   }
   elseif (variable_get('advanced_sphinx_connections_type', 'socket') == 'port') {
     $config['listen'] = variable_get('advanced_sphinx_searchd_host', realpath(conf_path()) . '/sphinx/sphinx.s') . ':' . variable_get('advanced_sphinx_searchd_port', '3306') . " \n";
-    watchdog('advanced_sphinx', '10', NULL, WATCHDOG_WARNING);
   }
 
-  watchdog('advanced_sphinx', '10', NULL, WATCHDOG_WARNING);
-
   $config_content = theme('advanced_sphinx_base_sphinx', array('config' => $config));
-  watchdog('advanced_sphinx', '12', NULL, WATCHDOG_WARNING);
   return $config_content;
 }
