@@ -189,7 +189,7 @@ function advanced_sphinx_search_box_submit($form, &$form_state) {
     $query['keys'] = $keys;
   }
   // Transform POST into a GET request.
-  advanced_sphinx_goto_search($query);
+  $form_state['redirect'] = advanced_sphinx_goto_search($query);
 }
 
 /**

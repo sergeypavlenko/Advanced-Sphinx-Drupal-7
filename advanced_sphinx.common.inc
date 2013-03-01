@@ -37,11 +37,8 @@ function advanced_sphinx_is_search_path($path = NULL) {
  *   This argument accepts a query string array or an already escaped query string.
  */
 function advanced_sphinx_goto_search($query = NULL) {
-  $url = url(variable_get('advanced_sphinx_search_path', 'search-content'), array('absolute' => TRUE));
-  if (isset($query) && is_array($query)) {
-    $url = url(variable_get('advanced_sphinx_search_path', 'search-content'), array('absolute' => TRUE, 'query' => $query));
-  }
-  drupal_goto($url);
+  $url = array(variable_get('advanced_sphinx_search_path', 'search-content'), array('query' => $query));
+  return $url;
 }
 
 /**

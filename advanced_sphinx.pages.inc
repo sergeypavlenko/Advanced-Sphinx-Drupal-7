@@ -118,7 +118,7 @@ function advanced_sphinx_search_form_submit($form, &$form_state) {
     form_set_error('keys', t('Please enter some keywords and/or other search options.'));
   }
   // Transform POST into a GET request.
-  advanced_sphinx_goto_search($query);
+  $form_state['redirect'] = advanced_sphinx_goto_search($query);
 }
 
 function theme_advanced_sphinx_search_results($variables) {
