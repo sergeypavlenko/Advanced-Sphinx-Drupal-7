@@ -340,7 +340,7 @@ function advanced_sphinx_create_config_file($dir) {
   $file = $dir_path . '/sphinx.conf';
   if (file_prepare_directory($dir_path) && !file_exists($file)) {
     $config_content = advanced_sphinx_get_config_content($dir_path);
-    $inf = file_put_contents($dir_path . '/sphinx.conf', $config_content);
+    $inf = file_put_contents($dir_path . '/sphinx.conf', render($config_content));
   }
 }
 
@@ -373,6 +373,10 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
     $config['listen'] = variable_get('advanced_sphinx_searchd_host', realpath(conf_path()) . '/sphinx/sphinx.s') . ':' . variable_get('advanced_sphinx_searchd_port', '3306') . " \n";
   }
 
-  $config_content = theme('advanced_sphinx_base_sphinx', array('config' => $config));
+  $config_content = array(
+    '#config' => $config,
+    '#theme' => 'advanced_sphinx_base_sphinx'
+  );
+  
   return $config_content;
 }

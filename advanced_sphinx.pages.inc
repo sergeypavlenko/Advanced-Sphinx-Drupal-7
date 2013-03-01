@@ -13,12 +13,12 @@
  * the search query URL clean as a whistle:
  * http://www.example.com/search-path?keys=... (including keys and options)
  * @see advanced_sphinx_get_query_string()
- * group=atribute поля для группировки
-  fil-atribute=znach,znach2,znach+n - поля для фильтрации
-  sor-atribute=asc - сортировка
-  sor-atribute2=desc -сортировка
-  keys=keyword - ключвые слова
-  view=v - просмотр без ключей
+ * group=atribute fields for grouping
+ * fil-atribute=znach,znach2,znach+n - fields for filter
+ * sor-atribute=asc - sort
+ * sor-atribute2=desc - sort
+ * keys=keyword - key-words
+ * view=v - view without keys
  */
 function advanced_sphinx_search_page() {
   global $user;
