@@ -155,50 +155,32 @@ function theme_advanced_sphinx_search_results($variables) {
 }
 
 function theme_advanced_sphinx_sorted_links($query, $sort = array()) {
-  $sort_variant = array(
-    'sor-relevance',
-    'sor-created',
-    'sor-changed'
-  );
-  $sort_title = array(
-    t('Relevance'),
-    t('Date'),
-    t('Update')
+  $sorts = array(
+    'sor-relevance' => t('Relevance'),
+    'sor-created'   => t('Date'),
+    'sor-changed'   => t('Update'),
   );
   $url = array();
-  $sorted = '';
-  foreach ($query as $sort => $sval) {
-    $i = 0;
-    if (strstr($sort, 'sor-') != FALSE) {
-      unset($query[$sort]);
-      while ($i < 3) {
-        $query[$sort_variant[$i]] = 'DESC';
-        $class = NULL;
-        if ($sort == $sort_variant[$i]) {
-          $class = 'class="sortnow"';
-        }
-        $url[] = '<a id="' . $sort_variant[$i] . '" href="' . url(variable_get('advanced_sphinx_search_path', 'search-content'), array('absolute' => TRUE, 'query' => $query)) . '" ' . $class . ' >' . $sort_title[$i] . '</a>';
-        unset($query[$sort_variant[$i]]);
-        $i++;
-      }
-      $key = str_replace("sor-", "", $sort);
-      $sorted = $key;
+  $search_path = variable_get('advanced_sphinx_search_path', 'search-content');
+  
+  //get current sort in query
+  $current_sort = advanced_sphinx_get_current_sort($query);
+  //delete sort-parametrs from query
+  $query = advanced_sphinx_query_delete_sorts($query, array_keys($sorts));
+  
+  foreach ($sorts as $key => $value) {
+    $class = '';
+    if (in_array($key, array_keys($current_sort))) {
+      $class = 'sortnow';
     }
+    $url[$key] = array(
+      'title' => $value,
+      'href' => $search_path,
+      'attributes' => array('id' => $key, 'class' => array($class)),
+      'query' => $query + array($key=>'DESC'),
+    );
   }
-  if ($sorted == '') {
-    $i = 0;
-    while ($i < 3) {
-      $query[$sort_variant[$i]] = 'DESC';
-      $class = NULL;
-      if ('sor-relevance' == $sort_variant[$i]) {
-        $class = 'class="sortnow"';
-      }
-      $url[] = '<a id="' . $sort_variant[$i] . '" href="' . url(variable_get('advanced_sphinx_search_path', 'search-content'), array('absolute' => TRUE, 'query' => $query)) . '" ' . $class . ' >' . $sort_title[$i] . '</a>';
-      unset($query[$sort_variant[$i]]);
-      $i++;
-    }
-  }
-  return implode('  ', $url);
+  return theme('links', array('links' => $url));
 }
 
 function advanced_sphinx_get_items_result_main($search_options, $search_results) {

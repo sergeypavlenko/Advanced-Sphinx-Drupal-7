@@ -369,3 +369,29 @@ function advanced_sphinx_pager($total_results, $results_per_page, $pager_element
   $GLOBALS['pager_page_array'][$pager_element] = max(0, min((int) $GLOBALS['pager_page_array'][$pager_element], ((int) $GLOBALS['pager_total'][$pager_element]) - 1));
   return theme('pager');
 }
+
+
+/**
+ * Delete sort parametrs from query
+ */
+function advanced_sphinx_query_delete_sorts($query, $delete) {
+  foreach($query as $key => $value) {
+    if (in_array($key, $delete)) {
+      unset($query[$key]);
+    }
+  }
+  return $query;
+}
+
+
+/**
+ * Get current sort parametr
+ */
+function advanced_sphinx_get_current_sort($query) {
+  foreach($query as $key => $value) {
+    if (strstr($key, 'sor-') != FALSE) {
+      $result[$key] = $value;
+    }
+  }
+  return $result;
+}
