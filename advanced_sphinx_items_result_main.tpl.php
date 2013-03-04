@@ -28,7 +28,7 @@
     <?php } ?>
     
     <?php if (isset($result['username'])) { ?>    
-      <span class="autor-result"><?php print $result['username']; ?>,</span>
+      <span class="autor-result"><?php print $result['username']; ?></span>
     <?php } ?>
     
     <?php if (isset($result['tags'])) {?>
