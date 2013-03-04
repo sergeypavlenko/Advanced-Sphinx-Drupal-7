@@ -135,7 +135,7 @@ function advanced_sphinx_settings() {
   $form['server']['advanced_sphinx_logs'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable log for search requests'),
-    '#default_value' => variable_get('advanced_sphinx_logs', TRUE),
+    '#default_value' => variable_get('advanced_sphinx_logs', FALSE),
   );
 
   $form['server']['advanced_sphinx_yandex'] = array(
