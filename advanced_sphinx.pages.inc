@@ -100,7 +100,6 @@ function advanced_sphinx_search_form($form, &$form_state, $search_options = arra
  * Validate a search form submission.
  */
 function advanced_sphinx_search_form_validate($form, &$form_state) {
-  #drupal_set_message('<pre>'.print_r($search_options,1).'</pre>');
   if (empty($form_state['values']['keys'])) {
     form_set_error('keys', t('Enter search request in search field!'));
   }
@@ -112,8 +111,6 @@ function advanced_sphinx_search_form_validate($form, &$form_state) {
 function advanced_sphinx_search_form_submit($form, &$form_state) {
   $search_options = advanced_sphinx_parse_request($form_state['values']);
   $query = advanced_sphinx_get_query_string($search_options);
-  #drupal_set_message('<pre>' . print_r($search_options,1) . '</pre>');
-  #drupal_set_message('<pre>' . print_r($query_string,1) . '</pre>');
   if (empty($query)) {
     form_set_error('keys', t('Please enter some keywords and/or other search options.'));
   }
@@ -156,7 +153,6 @@ function theme_advanced_sphinx_search_results($variables) {
 
 function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
   extract($variables);
-  drupal_set_message('annya-debug:<pre>'.print_r($variables, 1).'</pre>');
   $sorts = array(
     'sor-relevance' => t('Relevance'),
     'sor-created'   => t('Date'),

@@ -197,7 +197,6 @@ function advanced_sphinx_execute_query($search_options) {
     'excerpts' => array(),
     'groups' => array(),
   );
-  //drupal_set_message('<pre>'.check_plain(print_r($search_options,1)).'</pre>');
   $sphinx_query_keywords = array($search_options['keys']);
   // Obtain distributed index name, required to resolve search query.
   if (!variable_get('advanced_sphinx_query_index_delta', '')) {
@@ -263,7 +262,6 @@ function advanced_sphinx_execute_query($search_options) {
 
   // Send query to Sphinx.
   $sphinx_results = $advanced_sphinx->Query(implode(' ', $sphinx_query_keywords), $advanced_sphinx_query_index);
-  #drupal_set_message('<pre>'.check_plain(print_r($sphinx_results,1)).'</pre>');
   if (!$sphinx_results) {
     $message = $advanced_sphinx->GetLastError();
     if (!advanced_sphinx_check_connection()) {
@@ -290,12 +288,9 @@ function advanced_sphinx_execute_query($search_options) {
   $search_results['time'] = $sphinx_results['time'];
   $search_results['words'] = (isset($sphinx_results['words']) && is_array($sphinx_results['words']) ? $sphinx_results['words'] : array());
 
-//drupal_set_message('<pre>'.check_plain(print_r($sphinx_results['matches'],1)).'</pre>');
 // Load nodes referenced by returned results.
 
   foreach ($sphinx_results['matches'] as $id => $sphinx_match) {
-    //drupal_set_message('<pre>'.check_plain(print_r($sphinx_docid,1)).'</pre>');
-    //drupal_set_message('<pre>'.check_plain(print_r($sphinx_match,1)).'</pre>');\
     if (isset($sphinx_match['node_id']) && ($node = advanced_sphinx_get_node_info($sphinx_match['node_id']))) {
       $search_results['nodes'][] = $node;
       $search_results['titles'][] = check_plain($node->title);
@@ -313,7 +308,6 @@ function advanced_sphinx_execute_query($search_options) {
     'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
     'single_passage' => TRUE,
       ));
-  // drupal_set_message('<pre>'.check_plain(print_r($search_results,1)).'</pre>');
   if (!$search_results['titles']) {
     $search_results['titles'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content titles. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
@@ -332,7 +326,6 @@ function advanced_sphinx_execute_query($search_options) {
     $search_results['excerpts'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content snippets. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
   }
-  //drupal_set_message('<pre>'.check_plain(print_r($search_results,1)).'</pre>');
   return $search_results;
 }
 
