@@ -134,7 +134,8 @@ function theme_advanced_sphinx_search_results($variables) {
   if (!isset($result_wrapper['result'])) {
     $result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }
-  $result_wrapper['stat'] = format_plural($search_results['total_found'], t('Found 1 result'), t('Found @count results')) . ' ' . t('on @seconds seconds.', array('@seconds' => round($search_results['time'], 3)));
+  $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.',
+    array('@count' => $search_results['total_found'], '@seconds' => round($search_results['time'], 3)));
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
