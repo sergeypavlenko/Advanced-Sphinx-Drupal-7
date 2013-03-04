@@ -122,16 +122,16 @@ function advanced_sphinx_get_query_string($search_options) {
     if ($key == 'keys') {
       $query[$key] = $value;
     }
-    else if ($key == 'filters') {
+    elseif ($key == 'filters') {
       foreach ($search_options['filters'] as $fil => $fval) {
         $val = implode(',', $fval);
         $query['fil-' . $fil] = $val;
       }
     }
-    else if ($key == 'view' || $key == 'group') {
+    elseif ($key == 'view' || $key == 'group') {
       $query[$key] = $value;
     }
-    else if ($key == 'sorted') {
+    elseif ($key == 'sorted') {
       foreach ($search_options['sorted'] as $sort => $sval) {
         $query['sor-' . $sort] = $sval;
       }
@@ -388,6 +388,7 @@ function advanced_sphinx_query_delete_sorts($query, $delete) {
  * Get current sort parametr
  */
 function advanced_sphinx_get_current_sort($query) {
+  $result = array();
   foreach($query as $key => $value) {
     if (strstr($key, 'sor-') != FALSE) {
       $result[$key] = $value;

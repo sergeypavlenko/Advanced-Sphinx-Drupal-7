@@ -144,7 +144,7 @@ function theme_advanced_sphinx_search_results($variables) {
       $words[] = '<em>' . check_plain($word) . '</em> (' . t('results: @docs, repeats: @hits', array('@docs' => (int) $word_data['docs'], '@hits' => (int) $word_data['hits'])) . ')';
     }
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
-    $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', advanced_sphinx_get_query_string($search_options));
+    $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array('query' => advanced_sphinx_get_query_string($search_options)));
   }
 
   $output .= theme('advanced_sphinx_result_wrapper', array('result' => $result_wrapper));
@@ -154,7 +154,9 @@ function theme_advanced_sphinx_search_results($variables) {
   return $output;
 }
 
-function theme_advanced_sphinx_sorted_links($query, $sort = array()) {
+function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
+  extract($variables);
+  drupal_set_message('annya-debug:<pre>'.print_r($variables, 1).'</pre>');
   $sorts = array(
     'sor-relevance' => t('Relevance'),
     'sor-created'   => t('Date'),
@@ -177,7 +179,7 @@ function theme_advanced_sphinx_sorted_links($query, $sort = array()) {
       'title' => $value,
       'href' => $search_path,
       'attributes' => array('id' => $key, 'class' => array($class)),
-      'query' => $query + array($key=>'DESC'),
+      'query' => array_merge($query, array($key=>'DESC')),
     );
   }
   return theme('links', array('links' => $url));
