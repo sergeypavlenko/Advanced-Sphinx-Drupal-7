@@ -98,6 +98,8 @@ li.result-folded .number-result{
 .search-sorted ul.links {
   font-size: 100%;
   list-style-type: none;
+  display: inline-block;
+  padding-left: 0;
 }
 
 .search-sorted ul.links li {
