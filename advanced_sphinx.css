@@ -95,7 +95,16 @@ li.result-folded .number-result{
   -moz-border-radius: 10px;
 }
 
+.search-sorted ul.links {
+  font-size: 100%;
+  list-style-type: none;
+}
+
+.search-sorted ul.links li {
+  display: inline-block;
+}
+
 .search-sorted .sortnow {
- background-color: #E8E9EC;
- padding: 5px;
+  background-color: #E8E9EC;
+  padding: 5px;
 }
