@@ -161,14 +161,14 @@ function advanced_sphinx_parse_request($request_options = array()) {
     if ($key == 'keys') {
       $search_options[$key] = preg_replace('#\s+#', ' ', trim($value));
     }
-    else if (strstr($key, 'fil-') != FALSE) {
+    elseif (strstr($key, 'fil-') != FALSE) {
       $key = str_replace("fil-", "", $key);
       $search_options['filters'][$key] = explode(',', $value);
     }
-    else if ($key == 'view' || $key == 'group') {
+    elseif ($key == 'view' || $key == 'group') {
       $search_options[$key] = $value;
     }
-    else if (strstr($key, 'sor-') != FALSE) {
+    elseif (strstr($key, 'sor-') != FALSE) {
       $key = str_replace("sor-", "", $key);
       $search_options['sorted'][$key] = $value;
     }
@@ -368,7 +368,7 @@ function advanced_sphinx_pager($total_results, $results_per_page, $pager_element
  * Delete sort parametrs from query
  */
 function advanced_sphinx_query_delete_sorts($query, $delete) {
-  foreach($query as $key => $value) {
+  foreach ($query as $key => $value) {
     if (in_array($key, $delete)) {
       unset($query[$key]);
     }
@@ -382,7 +382,7 @@ function advanced_sphinx_query_delete_sorts($query, $delete) {
  */
 function advanced_sphinx_get_current_sort($query) {
   $result = array();
-  foreach($query as $key => $value) {
+  foreach ($query as $key => $value) {
     if (strstr($key, 'sor-') != FALSE) {
       $result[$key] = $value;
     }

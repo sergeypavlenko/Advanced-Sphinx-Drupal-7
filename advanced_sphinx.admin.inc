@@ -194,7 +194,7 @@ function advanced_sphinx_settings_validate($form, &$form_state) {
   if (strpos($form_state['values']['advanced_sphinx_search_path'], ' ') !== FALSE) {
     form_set_error('advanced_sphinx_search_path', t('Search path cannot contain whitespaces.'));
   }
-  else if ($form_state['values']['advanced_sphinx_search_path'] == 'search' && module_exists('search')) {
+  elseif ($form_state['values']['advanced_sphinx_search_path'] == 'search' && module_exists('search')) {
     form_set_error('advanced_sphinx_search_path', t("You should first uninstall the Drupal search module to be able to take over the <code>'search'</code> path."));
   }
 }

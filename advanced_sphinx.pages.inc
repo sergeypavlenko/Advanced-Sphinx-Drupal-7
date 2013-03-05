@@ -40,23 +40,6 @@ function advanced_sphinx_search_page() {
 }
 
 /**
- * Record a warning to watchdog.
- *
- * If current user has 'administer advanced_sphinx' privilege,
- * then the warning is just sent to the user interface.
- *
- * @param string $message
- */
-function advanced_sphinx_watchdog_warning($message) {
-  if (user_access('administer advanced_sphinx')) {
-    drupal_set_message($message, 'error');
-  }
-  else {
-    watchdog('advanced_sphinx', $message, NULL, WATCHDOG_WARNING);
-  }
-}
-
-/**
  * Render a search form.
  *
  * @param array $search_options
@@ -176,7 +159,7 @@ function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
       'title' => $value,
       'href' => $search_path,
       'attributes' => array('id' => $key, 'class' => array($class)),
-      'query' => array_merge($query, array($key=>'DESC')),
+      'query' => array_merge($query, array($key => 'DESC')),
     );
   }
   return theme('links', array('links' => $url));
@@ -197,14 +180,6 @@ function advanced_sphinx_get_items_result_main($search_options, $search_results)
       $items_result['title'] = l($title, 'node/' . $node->nid, array('html' => TRUE));
     }
     $items_result['excerpts'] = isset($search_results['excerpts'][$item_id]) ? '<p class="search-excerpt">' . $search_results['excerpts'][$item_id] . '</p>' . "\n" : '';
-    //TODO D7
-    /* if (module_exists('taxonomy') && is_array($node->taxonomy)) {
-      $links = array();
-      foreach ($node->taxonomy as $term) {
-      $links[] = l($term->name, taxonomy_term_path($term));
-      }
-      $items_result['tags'] = implode(' - ', $links);
-      } */
     $items_result['username'] = theme('username', array('account' => $node));
     $items_result['date'] = $node->created;
     if (property_exists($node, 'comment_count')) {
