@@ -162,6 +162,7 @@ function advanced_sphinx_search_box() {
     '#type' => 'textfield',
     '#default_value' => '',
     '#maxlength' => 600,
+    '#size' => 25,
     '#attributes' => array(
       'title' => t('Enter the terms you wish to search for.'),
       'class' => array('search-sphinx'),
