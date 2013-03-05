@@ -3,3 +3,4 @@ description = "Sphinx search integration for Drupal, based on MySQl-source type 
 package = "advanced_sphinx"
 version = "7.x-1.x-dev"
 core = "7.x"
+configure = admin/config/search/advanced_sphinx
