@@ -24,7 +24,11 @@ function advanced_sphinx_search_page() {
   global $user;
   // Parse request and build search options structure.
   $search_options = advanced_sphinx_parse_request($_GET);
-  variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
+  
+  //Set keys only if sphinx log enable(dirty-way)
+  if (variable_get('advanced_sphinx_logs', FALSE)) {
+    variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
+  }
   // Execute search query and collect the results.
   if (isset($search_options['keys']) || (!isset($search_options['keys']) && isset($search_options['view']))) {
     $search_results = advanced_sphinx_execute_query($search_options);
@@ -177,7 +181,7 @@ function advanced_sphinx_get_items_result_main($search_options, $search_results)
   foreach ($search_results['nodes'] as $item_id => $node) {
     $items_result['number'] = $item_id + 1 + $page * $search_options['results_per_page'];
     $title = (isset($search_results['titles'][$item_id]) ? $search_results['titles'][$item_id] : check_plain($node->title));
-    if (variable_get('advanced_sphinx_logs', TRUE)) {
+    if (variable_get('advanced_sphinx_logs', FALSE)) {
       $items_result['title'] = l($title, variable_get('advanced_sphinx_search_path', 'search-content') . '/service/' . $node->nid, array('html' => TRUE));
     }
     else {
