@@ -387,5 +387,8 @@ function advanced_sphinx_get_current_sort($query) {
       $result[$key] = $value;
     }
   }
+  if (empty($result)) {
+    $result['sor-relevance'] = 'DESC';
+  }
   return $result;
 }
