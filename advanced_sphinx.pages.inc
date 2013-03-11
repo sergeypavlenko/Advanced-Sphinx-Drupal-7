@@ -25,16 +25,17 @@ function advanced_sphinx_search_page() {
   // Parse request and build search options structure.
   $search_options = advanced_sphinx_parse_request($_GET);
   variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
-
   // Execute search query and collect the results.
-  if (isset($search_options['keys']) || (isset($search_options['keys']) && $search_options['view'])) {
+  if (isset($search_options['keys']) || (!isset($search_options['keys']) && isset($search_options['view']))) {
     $search_results = advanced_sphinx_execute_query($search_options);
-    $output = drupal_render(drupal_get_form('advanced_sphinx_search_form', $search_options));
-    $output .= theme('advanced_sphinx_search_results', array('search_options' => $search_options,
-      'search_results' => $search_results));
+    $output = array(
+      '#theme' => 'advanced_sphinx_search_results',
+      '#search_options' => $search_options,
+      '#search_results' => $search_results,
+    );
   }
   else {
-    $output = drupal_render(drupal_get_form('advanced_sphinx_search_form', $search_options));
+    $output = drupal_get_form('advanced_sphinx_search_form', $search_options);
   }
   return $output;
 }
@@ -117,8 +118,11 @@ function theme_advanced_sphinx_search_results($variables) {
   if (!isset($result_wrapper['result'])) {
     $result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }
-  $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.',
-    array('@count' => $search_results['total_found'], '@seconds' => round($search_results['time'], 3)));
+  $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.', array(
+    '@count' => $search_results['total_found'],
+    '@seconds' => round($search_results['time'], 3)
+    )
+  );
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
@@ -127,7 +131,7 @@ function theme_advanced_sphinx_search_results($variables) {
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
     $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array('query' => advanced_sphinx_get_query_string($search_options)));
   }
-
+  $result_wrapper['search_form'] = drupal_get_form('advanced_sphinx_search_form', $search_options);
   $output .= theme('advanced_sphinx_result_wrapper', array('result' => $result_wrapper));
 
   // Display pager.

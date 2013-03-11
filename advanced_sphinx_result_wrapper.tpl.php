@@ -12,23 +12,26 @@
  *   - $result['result']: List of result.
  */
 ?>
+<?php print render($result['search_form']);?>
 
-<p>
+<div class="search-stat">
   <?php print $result['stat']; ?>
-  
   <?php if (isset($result['word_stat'])) { ?>
     <?php print $result['word_stat']; ?>
   <?php } ?>
-</p>
+</div>
+
 <?php if(isset($result['sorted'])){ ?>
   <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
-<?php }; ?>
+<?php } ?>
+
 <div id="advanced-search clear-block">
   <ul class="search-results">
     <?php print $result['result']; ?>
   </ul>
 </div>
+
 <?php if(isset($result['sorted'])){ ?>
   <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
-<?php }; ?>
+<?php } ?>
 
