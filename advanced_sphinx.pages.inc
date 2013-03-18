@@ -24,36 +24,24 @@ function advanced_sphinx_search_page() {
   global $user;
   // Parse request and build search options structure.
   $search_options = advanced_sphinx_parse_request($_GET);
-  variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
-
+  
+  //Set keys only if sphinx log enable(dirty-way)
+  if (variable_get('advanced_sphinx_logs', FALSE)) {
+    variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
+  }
   // Execute search query and collect the results.
-  if (isset($search_options['keys']) || (isset($search_options['keys']) && $search_options['view'])) {
+  if (isset($search_options['keys']) || (!isset($search_options['keys']) && isset($search_options['view']))) {
     $search_results = advanced_sphinx_execute_query($search_options);
-    $output = drupal_render(drupal_get_form('advanced_sphinx_search_form', $search_options));
-    $output .= theme('advanced_sphinx_search_results', array('search_options' => $search_options,
-      'search_results' => $search_results));
+    $output = array(
+      '#theme' => 'advanced_sphinx_search_results',
+      '#search_options' => $search_options,
+      '#search_results' => $search_results,
+    );
   }
   else {
-    $output = drupal_render(drupal_get_form('advanced_sphinx_search_form', $search_options));
+    $output = drupal_get_form('advanced_sphinx_search_form', $search_options);
   }
   return $output;
-}
-
-/**
- * Record a warning to watchdog.
- *
- * If current user has 'administer advanced_sphinx' privilege,
- * then the warning is just sent to the user interface.
- *
- * @param string $message
- */
-function advanced_sphinx_watchdog_warning($message) {
-  if (user_access('administer advanced_sphinx')) {
-    drupal_set_message($message, 'error');
-  }
-  else {
-    watchdog('advanced_sphinx', $message, NULL, WATCHDOG_WARNING);
-  }
 }
 
 /**
@@ -134,8 +122,11 @@ function theme_advanced_sphinx_search_results($variables) {
   if (!isset($result_wrapper['result'])) {
     $result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }
-  $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.',
-    array('@count' => $search_results['total_found'], '@seconds' => round($search_results['time'], 3)));
+  $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.', array(
+    '@count' => $search_results['total_found'],
+    '@seconds' => round($search_results['time'], 3)
+    )
+  );
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
@@ -144,7 +135,7 @@ function theme_advanced_sphinx_search_results($variables) {
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
     $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array('query' => advanced_sphinx_get_query_string($search_options)));
   }
-
+  $result_wrapper['search_form'] = drupal_get_form('advanced_sphinx_search_form', $search_options);
   $output .= theme('advanced_sphinx_result_wrapper', array('result' => $result_wrapper));
 
   // Display pager.
@@ -176,7 +167,7 @@ function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
       'title' => $value,
       'href' => $search_path,
       'attributes' => array('id' => $key, 'class' => array($class)),
-      'query' => array_merge($query, array($key=>'DESC')),
+      'query' => array_merge($query, array($key => 'DESC')),
     );
   }
   return theme('links', array('links' => $url));
@@ -190,21 +181,13 @@ function advanced_sphinx_get_items_result_main($search_options, $search_results)
   foreach ($search_results['nodes'] as $item_id => $node) {
     $items_result['number'] = $item_id + 1 + $page * $search_options['results_per_page'];
     $title = (isset($search_results['titles'][$item_id]) ? $search_results['titles'][$item_id] : check_plain($node->title));
-    if (variable_get('advanced_sphinx_logs', TRUE)) {
+    if (variable_get('advanced_sphinx_logs', FALSE)) {
       $items_result['title'] = l($title, variable_get('advanced_sphinx_search_path', 'search-content') . '/service/' . $node->nid, array('html' => TRUE));
     }
     else {
       $items_result['title'] = l($title, 'node/' . $node->nid, array('html' => TRUE));
     }
     $items_result['excerpts'] = isset($search_results['excerpts'][$item_id]) ? '<p class="search-excerpt">' . $search_results['excerpts'][$item_id] . '</p>' . "\n" : '';
-    //TODO D7
-    /* if (module_exists('taxonomy') && is_array($node->taxonomy)) {
-      $links = array();
-      foreach ($node->taxonomy as $term) {
-      $links[] = l($term->name, taxonomy_term_path($term));
-      }
-      $items_result['tags'] = implode(' - ', $links);
-      } */
     $items_result['username'] = theme('username', array('account' => $node));
     $items_result['date'] = $node->created;
     if (property_exists($node, 'comment_count')) {

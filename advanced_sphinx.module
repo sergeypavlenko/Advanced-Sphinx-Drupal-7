@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Primarily Drupal hooks and global API functions to manipulate sphinx.
+ */
+
+/**
  * Load common module functions.
  */
 function advanced_sphinx_load_common_includes() {
