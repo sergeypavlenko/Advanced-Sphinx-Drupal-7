@@ -24,7 +24,7 @@
   
   <div class="info-result">
     <?php if (isset($result['date'])) { ?>
-      <span class="date-result"><?php print format_date($result['date'], 'custom','d.m.Y'); ?>,</span>
+      <span class="date-result"><?php print $result['date']; ?>,</span>
     <?php } ?>
     
     <?php if (isset($result['username'])) { ?>    

@@ -189,7 +189,7 @@ function advanced_sphinx_get_items_result_main($search_options, $search_results)
     }
     $items_result['excerpts'] = isset($search_results['excerpts'][$item_id]) ? '<p class="search-excerpt">' . $search_results['excerpts'][$item_id] . '</p>' . "\n" : '';
     $items_result['username'] = theme('username', array('account' => $node));
-    $items_result['date'] = $node->created;
+    $items_result['date'] = format_date($node->created, 'short');
     if (property_exists($node, 'comment_count')) {
       $items_result['comment_count'] = $node->comment_count;
     }
