@@ -50,3 +50,53 @@ function advanced_sphinx_uninstall() {
   db_query("DROP VIEW {$prefix}sphinxmain");
 }
 
+/**
+ * Implementation of hook_schema().
+ */
+function advanced_sphinx_schema() {
+
+  $schema['advanced_sphinx_livup'] = array(
+    'fields' => array(
+      'counter_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'max_doc_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('counter_id'),
+  );
+  $schema['advanced_sphinx_logs'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'keyword' => array(
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'default' => '',
+        'length' => 255,
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'counter' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
