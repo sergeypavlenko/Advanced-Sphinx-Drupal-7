@@ -79,7 +79,7 @@ function advanced_sphinx_init() {
 function advanced_sphinx_menu() {
   $items = array();
   $items['admin/config/search/advanced_sphinx'] = array(
-    'title' => 'Sphinx search',
+    'title' => 'Advanced Sphinx search',
     'description' => 'Administer Sphinx search module settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('advanced_sphinx_settings'),
@@ -124,7 +124,7 @@ function advanced_sphinx_menu() {
 function advanced_sphinx_block_info() {
   $blocks = array();
   $blocks['searchbox'] = array(
-    'info' => t('Sphinx search box'),
+    'info' => t('Advanced Sphinx search box'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
