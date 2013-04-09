@@ -11,13 +11,12 @@
 #  advanced_sphinx.module: n/a
 #  advanced_sphinx.info: n/a
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2013-03-15 15:29+0200\n"
-"PO-Revision-Date: 2013-03-15 15:29+0200\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-04-09 10:51+0300\n"
+"Last-Translator: Vitaly Morvanyuk <bober2000@ukr.net>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -34,7 +33,7 @@ msgstr "Сортировка"
 
 #: advanced_sphinx.admin.inc:16
 msgid "Function <em>memory_get_usage</em> not found. Please, make sure your PHP installation is compiled with --enable-memory-limit option."
-msgstr "Функция <em>memory_get_usage</em> не найдена. Проверьте, или PHP скомпилирован с опцией --enable-memory-limit option."
+msgstr "Функция <em>memory_get_usage</em> не найдена. Проверьте, скомпилирован ли PHP  с опцией --enable-memory-limit option."
 
 #: advanced_sphinx.admin.inc:21
 msgid "Sphinx server and config settings"
@@ -46,7 +45,7 @@ msgstr "Настройка опций Sphinx-сервера."
 
 #: advanced_sphinx.admin.inc:28
 msgid "Generate configuration file"
-msgstr "Сгенерировать конфигурационній файл"
+msgstr "Сгенерировать конфигурационный файл"
 
 #: advanced_sphinx.admin.inc:34
 msgid "Path to confige file"
@@ -58,7 +57,7 @@ msgstr "По-умолчанию \"sites/default/sphinx\"."
 
 #: advanced_sphinx.admin.inc:42
 msgid "Type of connection to Sphinx daemon"
-msgstr "Тип соединения с демоном Сфинкса"
+msgstr "Тип соединения с демоном Sphinx"
 
 #: advanced_sphinx.admin.inc:46
 msgid "Socket"
@@ -82,7 +81,7 @@ msgstr "Порт демона Sphinx"
 
 #: advanced_sphinx.admin.inc:63
 msgid "Port on which your <strong>Sphinx searchd daemon</strong> listens. Default Sphinx port is 3312."
-msgstr "Порт, который слушает демон Sphinx. По-умолчанию 3312."
+msgstr "Порт, который слушает демон Sphinx. По умолчанию 3312."
 
 #: advanced_sphinx.admin.inc:69
 msgid "Sphinx searchd connection timeout"
@@ -106,7 +105,7 @@ msgstr "Индексы для запросов"
 
 #: advanced_sphinx.admin.inc:86
 msgid "Name of the Sphinx index used for queries. If you have more than one index (ie. main+delta), you may configure Sphinx with a distributed index that joins all of them (local and/or remote) to provide a single interface to resolve queries."
-msgstr "Индексы, которые используются для запросов. Если у вас больше одного индекса(например main+delta), вы можете настроить работу Sphinx с помощью distibuted-индексов, для того, чтобы объеденить их всех(локальніе и удаленные). Это делается для того, что обеспечить общий интерфейс при запросах к демону."
+msgstr "Индексы, которые используются для запросов. Если у вас больше одного индекса(например main+delta), вы можете настроить работу Sphinx с помощью distributed-индексов, для того, чтобы объединить их всех(локальные и удаленные). Это делается для того, что обеспечить общий интерфейс при запросах к демону."
 
 #: advanced_sphinx.admin.inc:91
 msgid "Index name for queries delta"
@@ -360,7 +359,8 @@ msgstr ""
 msgid "Enter your keywords"
 msgstr "Введите поисковый запрос"
 
-#: advanced_sphinx.pages.inc:93 advanced_sphinx.module:141;101
+#: advanced_sphinx.pages.inc:93
+#: advanced_sphinx.module:141;101
 msgid "Search"
 msgstr "Поиск"
 
@@ -406,7 +406,7 @@ msgstr ""
 
 #: advanced_sphinx.module:122
 msgid "Sphinx search box"
-msgstr "Поиск Sphinx"
+msgstr "Блок поиска Sphinx"
 
 #: advanced_sphinx.module:167
 msgid "Enter the terms you wish to search for."
@@ -426,7 +426,7 @@ msgstr ""
 
 #: advanced_sphinx.module:85
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: advanced_sphinx.module:92
 msgid "Check connection"
@@ -438,15 +438,15 @@ msgstr "Проверка соединения к демону Sphinx searchd"
 
 #: advanced_sphinx.module:108
 msgid "Service"
-msgstr ""
+msgstr "Сервис"
 
 #: advanced_sphinx.info:0
 msgid "Advanced sphinx"
-msgstr ""
+msgstr "Продвинутый sphinx"
 
 #: advanced_sphinx.info:0
 msgid "Sphinx search integration for Drupal, based on MySQl-source type and support for main+delta index scheme."
-msgstr ""
+msgstr "Интеграция sphinx поиска в Drupal основанная на MySQL c поддержкой main и delta индексов"
 
 #: advanced_sphinx.info:0
 msgid "advanced_sphinx"
