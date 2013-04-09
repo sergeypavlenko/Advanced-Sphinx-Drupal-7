@@ -42,7 +42,6 @@ function advanced_sphinx_uninstall() {
   variable_del('advanced_sphinx_search_path');
   variable_del('advanced_sphinx_results_per_page');
   variable_del('advanced_sphinx_logs');
-  variable_del('advanced_sphinx_yandex');
   variable_del('advanced_sphinx_excerpts_limit');
   variable_del('advanced_sphinx_excerpts_around');
   variable_del('advanced_sphinx_excerpts_single_passage');

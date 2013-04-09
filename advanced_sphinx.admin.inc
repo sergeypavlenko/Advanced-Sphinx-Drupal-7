@@ -138,12 +138,6 @@ function advanced_sphinx_settings() {
     '#default_value' => variable_get('advanced_sphinx_logs', FALSE),
   );
 
-  $form['server']['advanced_sphinx_yandex'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Yandex-search'),
-    '#default_value' => variable_get('advanced_sphinx_yandex', FALSE),
-  );
-
   $form['search']['excerpts'] = array(
     '#type' => 'fieldset',
     '#title' => t('Excerpts builder settings'),

@@ -160,10 +160,6 @@ msgstr ""
 msgid "Enable log for search requests"
 msgstr ""
 
-#: advanced_sphinx.admin.inc:143
-msgid "Yandex-search"
-msgstr ""
-
 #: advanced_sphinx.admin.inc:149
 msgid "Excerpts builder settings"
 msgstr ""
