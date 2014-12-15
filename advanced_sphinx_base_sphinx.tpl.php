@@ -1,7 +1,7 @@
 source source_main
 {
   type               = mysql
-  sql_host           = localhost
+  sql_host           = <?php print $config['sql_host']; ?>
   sql_user           = <?php print $config['sql_user']; ?>
   sql_pass           = <?php print $config['sql_pass']; ?>
   sql_db             = <?php print $config['sql_db']; ?>
