@@ -209,6 +209,8 @@ function advanced_sphinx_settings_submit($form, &$form_state) {
  * Menu callback; Diagnose Sphinx searchd daemon connection.
  */
 function advanced_sphinx_check_connection_page() {
+  global $databases;
+
   $steps = array();
 
   $advanced_sphinx = &advanced_sphinx_get_client();
@@ -319,6 +321,18 @@ function advanced_sphinx_check_connection_page() {
           ));
     }
   }
+
+  $prefix = $databases['default']['default']['prefix'];
+
+  $steps['view'] = array(
+    'title' => t('View in the database'),
+    'messages' => array(),
+  );
+
+  $view_name = $prefix . 'sphinxmain';
+  $exist_view = db_table_exists($view_name);
+
+  $steps['view']['messages'][] = $exist_view ? (t('OK') . ' - ' . t('View "@name" exist.', array('@name' => $view_name))) : (t('ERROR') . ' - ' . t('View "@name" does not exist.', array('@name' => $view_name)));
 
   // Format HTML report.
   $items = array();
