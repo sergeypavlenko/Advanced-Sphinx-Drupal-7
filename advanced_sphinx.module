@@ -241,7 +241,7 @@ function advanced_sphinx_get_node_text_fast(&$node) {
     ' <',
     '> ',
     ' ',
-    ' '
+    ' ',
   ), $text);
   $text = preg_replace('#<(script|style)[^>]*>.*</\1>#s', ' ', $text);
   $text = strip_tags($text);
