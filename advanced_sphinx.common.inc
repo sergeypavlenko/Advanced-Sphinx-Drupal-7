@@ -21,7 +21,7 @@ define('ADVANCED_SPHINX_MATCH_PHRASE', 2);
  *
  * @param string $path
  *   Path to check. Defaults to $_GET['q'].
- * @return boolean
+ * @return bool
  */
 function advanced_sphinx_is_search_path($path = NULL) {
   if (!isset($path)) {
