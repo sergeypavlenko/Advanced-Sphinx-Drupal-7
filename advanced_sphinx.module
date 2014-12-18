@@ -198,8 +198,8 @@ function advanced_sphinx_search_box_submit($form, &$form_state) {
 /**
  * Obtain PHP memory_limit.
  *
- * Requirements: PHP needs to be compiled with --enable-memory-limit.
  * @see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
+ *   Requirements: PHP needs to be compiled with --enable-memory-limit.
  *
  * @return int
  *   Memory limit in bytes, -1 if error.
