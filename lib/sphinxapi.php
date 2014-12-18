@@ -1,8 +1,5 @@
 <?php
 
-//
-// $Id: sphinxapi.php 3087 2012-01-30 23:07:35Z shodan $
-//
 define('DISABLE_MATCHES', TRUE);
 
 //
@@ -1802,7 +1799,3 @@ class SphinxClient {
     return $tag;
   }
 }
-
-//
-// $Id: sphinxapi.php 3087 2012-01-30 23:07:35Z shodan $
-//

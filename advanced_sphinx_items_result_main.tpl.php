@@ -1,5 +1,4 @@
 <?php
-// $Id: advanced_sphinx_items_result_main.tpl.php, v 1.0 2011/07/05 19:59:16 gagaga Exp $
 /**
  * @file advanced_sphinx_items_result_main.tpl.php
  * Default theme implementation to item search result.

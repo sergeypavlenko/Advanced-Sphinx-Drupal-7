@@ -1,6 +1,5 @@
 <?php
 
-// $Id: advanced_sphinx.common.inc, v 1.0 2011/07/05 19:59:16 gagaga Exp $
 /**
  * @file
  * Common functions for the Sphinx search module.

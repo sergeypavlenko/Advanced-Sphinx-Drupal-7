@@ -1,6 +1,5 @@
 <?php
 
-// $Id: advanced_sphinx.pages.inc, v 1.0 2011/07/05 19:59:16 gagaga Exp $
 /**
  * @file
  * Implementation of pages used to search using Sphinx search module.

@@ -1,6 +1,5 @@
 <?php
 
-// $Id: advanced_sphinx.admin.inc, v 1.0 2011/07/05 19:59:16 gagaga Exp $
 /**
  * @file
  * Administration interface for the advanced_sphinx module.
