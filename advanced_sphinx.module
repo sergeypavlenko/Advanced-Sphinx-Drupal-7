@@ -163,7 +163,7 @@ function advanced_sphinx_search_box() {
   // Build basic search box form.
   $form['inline'] = array(
     '#prefix' => '<div class="container-inline">',
-    '#suffix' => '</div>'
+    '#suffix' => '</div>',
   );
   $form['inline']['keys'] = array(
     '#type' => 'textfield',
