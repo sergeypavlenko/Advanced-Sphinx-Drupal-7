@@ -78,7 +78,7 @@ function advanced_sphinx_flood_limit_exceeded($exceeded = NULL) {
 function &advanced_sphinx_get_client() {
   static $advanced_sphinx;
   if (!isset($advanced_sphinx)) {
-    require_once(drupal_get_path('module', 'advanced_sphinx') . '/lib/sphinxapi.php');
+    require_once drupal_get_path('module', 'advanced_sphinx') . '/lib/sphinxapi.php';
 
     $advanced_sphinx = new SphinxClient();
     $advanced_sphinx->SetServer(variable_get('advanced_sphinx_searchd_host', 'localhost'), (int) variable_get('advanced_sphinx_searchd_port', '3312'));
