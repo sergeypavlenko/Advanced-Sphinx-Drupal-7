@@ -35,4 +35,3 @@
   <div
     class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php endif; ?>
-
