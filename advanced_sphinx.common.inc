@@ -40,7 +40,7 @@ function advanced_sphinx_is_search_path($path = NULL) {
 function advanced_sphinx_goto_search($query = NULL) {
   $url = array(
     variable_get('advanced_sphinx_search_path', 'search-content'),
-    array('query' => $query)
+    array('query' => $query),
   );
   return $url;
 }

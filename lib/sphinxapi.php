@@ -795,7 +795,7 @@ class SphinxClient {
         "type" => SPH_FILTER_VALUES,
         "attr" => $attribute,
         "exclude" => $exclude,
-        "values" => $values
+        "values" => $values,
       );
     }
   }
@@ -813,7 +813,7 @@ class SphinxClient {
       "attr" => $attribute,
       "exclude" => $exclude,
       "min" => $min,
-      "max" => $max
+      "max" => $max,
     );
   }
 
@@ -830,7 +830,7 @@ class SphinxClient {
       "attr" => $attribute,
       "exclude" => $exclude,
       "min" => $min,
-      "max" => $max
+      "max" => $max,
     );
   }
 
@@ -847,7 +847,7 @@ class SphinxClient {
       "attrlat" => $attrlat,
       "attrlong" => $attrlong,
       "lat" => $lat,
-      "long" => $long
+      "long" => $long,
     );
   }
 
@@ -898,14 +898,14 @@ class SphinxClient {
       SPH_ATTR_TIMESTAMP,
       SPH_ATTR_BOOL,
       SPH_ATTR_FLOAT,
-      SPH_ATTR_BIGINT
+      SPH_ATTR_BIGINT,
     )));
     assert(is_array($values));
 
     $this->_overrides[$attrname] = array(
       "attr" => $attrname,
       "type" => $attrtype,
-      "values" => $values
+      "values" => $values,
     );
   }
 
@@ -1307,7 +1307,7 @@ class SphinxClient {
         $p += 8;
         $result["words"][$word] = array(
           "docs" => sprintf("%u", $docs),
-          "hits" => sprintf("%u", $hits)
+          "hits" => sprintf("%u", $hits),
         );
       }
     }
@@ -1592,7 +1592,7 @@ class SphinxClient {
       '/',
       '^',
       '$',
-      '='
+      '=',
     );
     $to = array(
       '\\\\',
@@ -1608,7 +1608,7 @@ class SphinxClient {
       '\/',
       '\^',
       '\$',
-      '\='
+      '\=',
     );
 
     return str_replace($from, $to, $string);
