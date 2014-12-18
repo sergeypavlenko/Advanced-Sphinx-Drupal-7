@@ -327,7 +327,8 @@ function advanced_sphinx_log($nid) {
 
 
 /**
- * Create directory hierachy for sphinx config and sphinx config file if access available.
+ * Create directory hierachy for sphinx config and sphinx config file
+ * if access available.
  */
 function advanced_sphinx_create_config_dir() {
   if (variable_get('advanced_sphinx_generate_config', FALSE) == 1) {
