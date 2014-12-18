@@ -289,8 +289,8 @@ function advanced_sphinx_get_node_info($nid) {
     $res = advanced_sphinx_get_node_count($nid);
     $result->comment_count = $res->comment_count;
   }
-  //TODO in D7
-  //$result->taxonomy = taxonomy_node_get_terms($result);
+  // @todo in D7
+  // $result->taxonomy = taxonomy_node_get_terms($result);
   return $result;
 }
 
