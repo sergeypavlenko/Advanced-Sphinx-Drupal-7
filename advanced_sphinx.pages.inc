@@ -47,7 +47,7 @@ function advanced_sphinx_search_page() {
  *
  * @param array $search_options
  *   The search string and options entered by the user.
- * @param boolean $advanced_options_collapsed
+ * @param bool $advanced_options_collapsed
  *   TRUE to collapse Advanced search options fieldset.
  * @return array
  *   The search form.
