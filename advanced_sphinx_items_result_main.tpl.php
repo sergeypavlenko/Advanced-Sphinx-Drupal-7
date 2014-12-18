@@ -1,6 +1,6 @@
 <?php
 /**
- * @file advanced_sphinx_items_result_main.tpl.php
+ * @file
  * Default theme implementation to item search result.
  *
  * Available variables:
