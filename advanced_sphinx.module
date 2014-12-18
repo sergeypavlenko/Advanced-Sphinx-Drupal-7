@@ -15,7 +15,7 @@ function advanced_sphinx_load_common_includes() {
 advanced_sphinx_load_common_includes();
 
 /**
- * Implementation of hook_theme()
+ * Implements hook_theme()
  */
 function advanced_sphinx_theme() {
   return array(
@@ -53,7 +53,7 @@ function advanced_sphinx_theme() {
 }
 
 /**
- * Implementation of  hook_permission().
+ * Implements hook_permission().
  */
 function advanced_sphinx_permission() {
   return array(
@@ -68,7 +68,7 @@ function advanced_sphinx_permission() {
 }
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function advanced_sphinx_init() {
   // We need our own CSS in all pages because of tagadelic and similar blocks.
@@ -76,7 +76,7 @@ function advanced_sphinx_init() {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function advanced_sphinx_menu() {
   $items = array();
@@ -121,7 +121,7 @@ function advanced_sphinx_menu() {
 }
 
 /**
- * Implementation of hook_block_info().
+ * Implements hook_block_info().
  */
 function advanced_sphinx_block_info() {
   $blocks = array();
@@ -134,7 +134,7 @@ function advanced_sphinx_block_info() {
 }
 
 /**
- * Implementation of hook_block_view().
+ * Implements hook_block_view().
  */
 function advanced_sphinx_block_view($delta = '') {
   $blocks = array();
