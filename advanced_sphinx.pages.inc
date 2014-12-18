@@ -58,16 +58,16 @@ function advanced_sphinx_search_form($form, &$form_state, $search_options = arra
   $form = array(
     '#action' => url(variable_get('advanced_sphinx_search_path', 'search-content')),
     '#attributes' => array(
-      'class' => 'search-form'
+      'class' => 'search-form',
     ),
   );
   $form['basic'] = array(
     '#type' => 'item',
-    '#title' => t('Enter your keywords')
+    '#title' => t('Enter your keywords'),
   );
   $form['basic']['inline'] = array(
     '#prefix' => '<div class="container-inline">',
-    '#suffix' => '</div>'
+    '#suffix' => '</div>',
   );
   $form['basic']['inline']['keys'] = array(
     '#type' => 'textfield',
@@ -78,7 +78,7 @@ function advanced_sphinx_search_form($form, &$form_state, $search_options = arra
   );
   $form['basic']['inline']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Search')
+    '#value' => t('Search'),
   );
 
   return $form;
@@ -124,7 +124,7 @@ function theme_advanced_sphinx_search_results($variables) {
   }
   $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.', array(
       '@count' => $search_results['total_found'],
-      '@seconds' => round($search_results['time'], 3)
+      '@seconds' => round($search_results['time'], 3),
     )
   );
   if (!empty($search_results['words'])) {
@@ -132,7 +132,7 @@ function theme_advanced_sphinx_search_results($variables) {
     foreach ($search_results['words'] as $word => $word_data) {
       $words[] = '<em>' . check_plain($word) . '</em> (' . t('results: @docs, repeats: @hits', array(
           '@docs' => (int) $word_data['docs'],
-          '@hits' => (int) $word_data['hits']
+          '@hits' => (int) $word_data['hits'],
         )) . ')';
     }
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
