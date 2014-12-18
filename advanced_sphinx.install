@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_install()
+ * Implements hook_install()
  */
 function advanced_sphinx_install() {
   global $databases;
@@ -23,7 +23,7 @@ function advanced_sphinx_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function advanced_sphinx_uninstall() {
   global $databases;
@@ -51,10 +51,9 @@ function advanced_sphinx_uninstall() {
 }
 
 /**
- * Implementation of hook_schema().
+ * Implements hook_schema().
  */
 function advanced_sphinx_schema() {
-
   $schema['advanced_sphinx_livup'] = array(
     'fields' => array(
       'counter_id' => array(
