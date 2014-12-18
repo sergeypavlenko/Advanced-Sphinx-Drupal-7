@@ -43,7 +43,7 @@ function advanced_sphinx_settings() {
     '#required' => TRUE,
     '#options' => array(
       'socket' => t('Socket'),
-      'port' => t('Port')
+      'port' => t('Port'),
     ),
   );
 
@@ -88,7 +88,7 @@ function advanced_sphinx_settings() {
       17,
       18,
       19,
-      20
+      20,
     )),
     '#description' => t('Timeout in seconds used for connections to your <strong>Sphinx searchd daemon</strong>. Leave 0 for PHP defaults for <a href="@fsockopen" target="_blank">fsockopen()</a>.', array('@fsockopen' => 'http://www.php.net/fsockopen')),
   );
@@ -164,7 +164,7 @@ function advanced_sphinx_settings() {
       70,
       80,
       90,
-      100
+      100,
     )),
     '#description' => t('How many items will be shown on search results page.'),
   );
@@ -198,7 +198,7 @@ function advanced_sphinx_settings() {
       640,
       768,
       896,
-      1024
+      1024,
     )),
     '#description' => t('Maximum snippet size (in Sphinx symbols) used to build content excerpts for search results.'),
   );
@@ -329,7 +329,7 @@ function advanced_sphinx_check_connection_page() {
             t('Total results available: @total', array('@total' => $sphinx_results['total'])),
             t('Last indexed node: @nid @updated', array(
               '@nid' => $nid,
-              '@updated' => $updated
+              '@updated' => $updated,
             )),
           ),
         ));
@@ -369,7 +369,7 @@ function advanced_sphinx_check_connection_page() {
             t('Sample text: <code>@sample</code>', array('@sample' => $excerpt_samples[0])),
             t('Keywords: <code>@keywords</code>', array('@keywords' => $excerpt_keywords)),
             t('Result: <code>@result</code>', array('@result' => $excerpt_results[0])),
-          )
+          ),
         ));
     }
   }
@@ -391,7 +391,7 @@ function advanced_sphinx_check_connection_page() {
   foreach ($steps as $step) {
     $items[] = theme('item_list', array(
       'items' => $step['messages'],
-      'title' => $step['title']
+      'title' => $step['title'],
     ));
   }
   return theme('item_list', array('items' => $items));
