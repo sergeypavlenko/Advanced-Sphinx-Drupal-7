@@ -291,7 +291,7 @@ function advanced_sphinx_execute_query($search_options) {
   $search_results['words'] = (isset($sphinx_results['words']) && is_array($sphinx_results['words']) ? $sphinx_results['words'] : array());
 
   // Load nodes referenced by returned results.
-  foreach ($sphinx_results['matches'] as $id => $sphinx_match) {
+  foreach ($sphinx_results['matches'] as $sphinx_match) {
     if (isset($sphinx_match['node_id']) && ($node = advanced_sphinx_get_node_info($sphinx_match['node_id']))) {
       $search_results['nodes'][] = $node;
       $search_results['titles'][] = check_plain($node->title);
