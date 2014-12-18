@@ -236,7 +236,8 @@ function advanced_sphinx_get_memory_limit() {
 function advanced_sphinx_get_node_text_fast(&$node) {
   $text = $node->body_value;
 
-  // Strip off all tags, but insert space before/after them to keep word boundaries.
+  // Strip off all tags, but insert space before/after them
+  // to keep word boundaries.
   $text = str_replace(array('<', '>', '[', ']'), array(
     ' <',
     '> ',
