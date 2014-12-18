@@ -29,7 +29,7 @@ function advanced_sphinx_uninstall() {
   global $databases;
   $prefix = $databases['default']['default']['prefix'];
 
-  //delete module variables
+  // Delete module variables.
   variable_del('advanced_sphinx_generate_config');
   variable_del('advanced_sphinx_path_config');
   variable_del('advanced_sphinx_searchd_host');
@@ -46,7 +46,7 @@ function advanced_sphinx_uninstall() {
   variable_del('advanced_sphinx_excerpts_single_passage');
   variable_del('advanced_sphinx_keys');
 
-  //drop view sphinxmain
+  // Drop view sphinxmain.
   db_query("DROP VIEW {$prefix}sphinxmain");
 }
 
