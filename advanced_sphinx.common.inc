@@ -232,12 +232,12 @@ function advanced_sphinx_execute_query($search_options) {
   $advanced_sphinx->ResetGroupBy();
   $advanced_sphinx->SetLimits($current_page * $search_options['results_per_page'], $search_options['results_per_page']);
   $advanced_sphinx->SetFieldWeights(array('title' => 20, 'body' => 5));
-  #$advanced_sphinx->SetIndexWeights(array('index1'=>20, 'index2'=>5));
+  // $advanced_sphinx->SetIndexWeights(array('index1'=>20, 'index2'=>5));
   $sphinx_excerpt_keywords = $sphinx_query_keywords[0];
   $advanced_sphinx->SetMatchMode(SPH_MATCH_EXTENDED2);
   $advanced_sphinx->SetRankingMode(SPH_RANK_MATCHANY);
-  #$advanced_sphinx->SetRankingMode(SPH_RANK_PROXIMITY_BM25);
-  #$advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');
+  // $advanced_sphinx->SetRankingMode(SPH_RANK_PROXIMITY_BM25);
+  // $advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');
   // Sort options.
   if (isset($search_options['sorted'])) {
     foreach ($search_options['sorted'] as $key => $value) {
