@@ -72,7 +72,7 @@ function advanced_sphinx_flood_limit_exceeded($exceeded = NULL) {
 }
 
 /**
- * Instatiate a Sphinx search client object.
+ * Instantiate a Sphinx search client object.
  *
  * Usage:
  *   $advanced_sphinx = &advanced_sphinx_get_client();
@@ -124,27 +124,28 @@ function advanced_sphinx_check_connection() {
  *
  * @param array $search_options
  *   Search options structure.
+ *
  * @return string
  *   Encoded query string. NULL indicates no search filter has been specified.
  */
 function advanced_sphinx_get_query_string($search_options) {
   $query = array();
-  foreach ($search_options as $key => $value) {
+  foreach ($search_options as $key => $option) {
     if ($key == 'keys') {
-      $query[$key] = $value;
+      $query[$key] = $option;
     }
     elseif ($key == 'filters') {
-      foreach ($search_options['filters'] as $fil => $fval) {
-        $val = implode(',', $fval);
-        $query['fil-' . $fil] = $val;
+      foreach ($search_options['filters'] as $filter_key => $filter_val) {
+        $val = implode(',', $filter_val);
+        $query['fil-' . $filter_key] = $val;
       }
     }
     elseif ($key == 'view' || $key == 'group') {
-      $query[$key] = $value;
+      $query[$key] = $option;
     }
     elseif ($key == 'sorted') {
-      foreach ($search_options['sorted'] as $sort => $sval) {
-        $query['sor-' . $sort] = $sval;
+      foreach ($search_options['sorted'] as $sort_key => $sort_val) {
+        $query['sor-' . $sort_key] = $sort_val;
       }
     }
   }
@@ -157,6 +158,7 @@ function advanced_sphinx_get_query_string($search_options) {
  *
  * @param array $request_options
  *   Requested search options.
+ *
  * @return array
  *   Search options structure.
  */
@@ -195,6 +197,7 @@ function advanced_sphinx_parse_request($request_options = array()) {
  *
  * @param array $search_options
  *   Search options structure.
+ *
  * @return array
  *   Search results structure.
  */
@@ -252,8 +255,8 @@ function advanced_sphinx_execute_query($search_options) {
   $advanced_sphinx->SetRankingMode(SPH_RANK_MATCHANY);
   // $advanced_sphinx->SetRankingMode(SPH_RANK_PROXIMITY_BM25);
   // $advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');
-  // Sort options.
 
+  // Sort options.
   if (isset($search_options['sorted'])) {
     foreach ($search_options['sorted'] as $key => $value) {
       if ($key == 'relevance') {
@@ -301,7 +304,9 @@ function advanced_sphinx_execute_query($search_options) {
   $message = $advanced_sphinx->GetLastWarning();
 
   if (!empty($message)) {
-    $search_results['warnings'][] = t('Search query warning: %message', array('%message' => $message));
+    $search_results['warnings'][] = t('Search query warning: %message', array(
+      '%message' => $message,
+    ));
   }
 
   if (empty($sphinx_results['matches'])) {
@@ -355,6 +360,7 @@ function advanced_sphinx_execute_query($search_options) {
     $search_results['excerpts'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content snippets. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
   }
+
   return $search_results;
 }
 
@@ -376,15 +382,18 @@ function advanced_sphinx_get_current_page($pager_element = 0) {
  *
  * @param int $total_results
  *   The total number of returned search results.
+ *
  * @param int $results_per_page
  *   The number of query results to display per page.
+ *
  * @param int $pager_element
  *   An optional integer to distinguish between multiple pagers on one page.
  *
  * @return string
  */
 function advanced_sphinx_pager($total_results, $results_per_page, $pager_element = 0) {
-  $page = isset($_GET['page']) ? $_GET['page'] : NULL;
+  $page = isset($_GET['page']) ? (int) $_GET['page'] : NULL;
+
   $GLOBALS['pager_page_array'] = explode(',', $page);
   $GLOBALS['pager_total_items'][$pager_element] = $total_results;
   $GLOBALS['pager_total'][$pager_element] = ceil($total_results / $results_per_page);
@@ -392,7 +401,6 @@ function advanced_sphinx_pager($total_results, $results_per_page, $pager_element
 
   return theme('pager');
 }
-
 
 /**
  * Delete sort parameters from query.
@@ -406,7 +414,6 @@ function advanced_sphinx_query_delete_sorts($query, $delete) {
 
   return $query;
 }
-
 
 /**
  * Get current sort parameter.

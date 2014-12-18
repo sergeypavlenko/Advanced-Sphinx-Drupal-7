@@ -225,6 +225,7 @@ function advanced_sphinx_get_memory_limit() {
     if (!preg_match('#([0-9]+)(K|M|G)#', strtoupper($memory_limit), $matches)) {
       return -1;
     }
+
     $memory_limit = (int) $matches[1];
     switch ($matches[2]) {
       case 'G':
@@ -277,9 +278,8 @@ function advanced_sphinx_get_node_count($nid) {
   return $result;
 }
 
-
 /**
- * Get results from sphinxmain view for node.
+ * Get results from "sphinxmain" view for node.
  */
 function advanced_sphinx_get_data_sphinxmain($nid) {
   $result = db_select('sphinxmain', 'sphinx')
@@ -310,6 +310,9 @@ function advanced_sphinx_get_node_info($nid) {
 
 /**
  * Insert data in sphinx log and redirect to node.
+ *
+ * @param int $nid
+ *   Node ID.
  */
 function advanced_sphinx_log($nid) {
   $keyword = variable_get('advanced_sphinx_keys', '');
@@ -343,7 +346,7 @@ function advanced_sphinx_log($nid) {
 
 
 /**
- * Create directory hierachy for sphinx config and sphinx config file
+ * Create directory hierarchy for sphinx config and sphinx config file
  * if access available.
  */
 function advanced_sphinx_create_config_dir() {

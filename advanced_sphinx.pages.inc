@@ -120,7 +120,10 @@ function advanced_sphinx_search_form_submit($form, &$form_state) {
 function theme_advanced_sphinx_search_results($variables) {
   // Display information about query execution.
   $output = '';
-  extract($variables);
+
+  // Params.
+  $search_results = $variables['search_results'];
+  $search_options = $variables['search_options'];
 
   // Display list of formatted search results.
   if ($search_results['error_message']) {
@@ -149,8 +152,11 @@ function theme_advanced_sphinx_search_results($variables) {
           '@hits' => (int) $word_data['hits'],
         )) . ')';
     }
+
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
-    $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array('query' => advanced_sphinx_get_query_string($search_options)));
+    $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array(
+      'query' => advanced_sphinx_get_query_string($search_options),
+    ));
   }
 
   $result_wrapper['search_form'] = drupal_get_form('advanced_sphinx_search_form', $search_options);
@@ -161,8 +167,8 @@ function theme_advanced_sphinx_search_results($variables) {
   return $output;
 }
 
-function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
-  extract($variables);
+function theme_advanced_sphinx_sorted_links($variables) {
+  $query = $variables['query'];
 
   $sorts = array(
     'sor-relevance' => t('Relevance'),
@@ -192,13 +198,14 @@ function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
       'query' => array_merge($query, array($key => 'DESC')),
     );
   }
+
   return theme('links', array('links' => $url));
 }
 
 function advanced_sphinx_get_items_result_main($search_options, $search_results) {
   $items_result = array();
   $result_wrapper = array('result' => '');
-  $page = isset($_GET['page']) ? $_GET['page'] : 0;
+  $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
 
   foreach ($search_results['nodes'] as $item_id => $node) {
     $items_result['number'] = $item_id + 1 + $page * $search_options['results_per_page'];
