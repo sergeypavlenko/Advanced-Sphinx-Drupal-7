@@ -23,30 +23,30 @@ function advanced_sphinx_theme() {
       'variables' => array(
         'search_options' => NULL,
         'search_results' => NULL,
-      )
+      ),
     ),
     'advanced_sphinx_result_wrapper' => array(
       'template' => 'advanced_sphinx_result_wrapper',
       'variables' => array(
-        'result' => array()
+        'result' => array(),
       ),
     ),
     'advanced_sphinx_items_result_main' => array(
       'template' => 'advanced_sphinx_items_result_main',
       'variables' => array(
-        'result' => array()
+        'result' => array(),
       ),
     ),
     'advanced_sphinx_base_sphinx' => array(
       'template' => 'advanced_sphinx_base_sphinx',
       'variables' => array(
-        'config' => array()
+        'config' => array(),
       ),
     ),
     'advanced_sphinx_sorted_links' => array(
       'variables' => array(
         'query' => NULL,
-        'sort' => array()
+        'sort' => array(),
       ),
     ),
   );
