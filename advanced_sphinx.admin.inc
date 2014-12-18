@@ -246,8 +246,8 @@ function advanced_sphinx_settings_validate($form, &$form_state) {
  * Submit handler for module settings form.
  */
 function advanced_sphinx_settings_submit($form, &$form_state) {
-
   advanced_sphinx_create_config_dir();
+
   // Rebuild menus when search page path has been changed.
   if ($form_state['values']['advanced_sphinx_search_path'] != $form['search']['advanced_sphinx_search_path']['#default_value']) {
     menu_rebuild();
@@ -263,12 +263,14 @@ function advanced_sphinx_check_connection_page() {
   $steps = array();
 
   $advanced_sphinx = &advanced_sphinx_get_client();
+
   if (!variable_get('advanced_sphinx_query_index_delta', '')) {
     $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '');
   }
   else {
     $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '') . ',' . variable_get('advanced_sphinx_query_index_delta', '');
   }
+
   $advanced_sphinx_excerpts_index = variable_get('advanced_sphinx_excerpts_index', '');
 
   // Check connection.
@@ -394,5 +396,6 @@ function advanced_sphinx_check_connection_page() {
       'title' => $step['title'],
     ));
   }
+
   return theme('item_list', array('items' => $items));
 }

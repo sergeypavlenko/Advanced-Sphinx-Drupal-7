@@ -28,6 +28,7 @@ function advanced_sphinx_is_search_path($path = NULL) {
   if (!isset($path)) {
     $path = $_GET['q'];
   }
+
   return (strpos($path, variable_get('advanced_sphinx_search_path', 'search-content')) === 0);
 }
 
@@ -36,12 +37,15 @@ function advanced_sphinx_is_search_path($path = NULL) {
  *
  * @param mixed $query
  *   This argument accepts a query string array or an already escaped query string.
+ *
+ * @return array
  */
 function advanced_sphinx_goto_search($query = NULL) {
   $url = array(
     variable_get('advanced_sphinx_search_path', 'search-content'),
     array('query' => $query),
   );
+
   return $url;
 }
 
@@ -63,6 +67,7 @@ function advanced_sphinx_flood_limit_exceeded($exceeded = NULL) {
   if (!empty($exceeded)) {
     $GLOBALS['advanced_sphinx_flood_limit_exceeded'] = TRUE;
   }
+
   return isset($GLOBALS['advanced_sphinx_flood_limit_exceeded']);
 }
 
@@ -77,12 +82,14 @@ function advanced_sphinx_flood_limit_exceeded($exceeded = NULL) {
  */
 function &advanced_sphinx_get_client() {
   static $advanced_sphinx;
+
   if (!isset($advanced_sphinx)) {
     require_once drupal_get_path('module', 'advanced_sphinx') . '/lib/sphinxapi.php';
 
     $advanced_sphinx = new SphinxClient();
     $advanced_sphinx->SetServer(variable_get('advanced_sphinx_searchd_host', 'localhost'), (int) variable_get('advanced_sphinx_searchd_port', '3312'));
     $advanced_sphinx->SetLimits(0, 30, 500);
+
     // Setup connection timeout?
     if (($advanced_sphinx_searchd_timeout = (int) variable_get('advanced_sphinx_searchd_timeout', 0)) > 0) {
       $advanced_sphinx->SetConnectTimeout($advanced_sphinx_searchd_timeout);
@@ -141,6 +148,7 @@ function advanced_sphinx_get_query_string($search_options) {
       }
     }
   }
+
   return $query;
 }
 
@@ -161,6 +169,7 @@ function advanced_sphinx_parse_request($request_options = array()) {
     'excerpts_single_passage' => (int) variable_get('advanced_sphinx_excerpts_single_passage', 0),
     'errors' => array(),
   );
+
   foreach ($request_options as $key => $value) {
     if ($key == 'keys') {
       $search_options[$key] = preg_replace('#\s+#', ' ', trim($value));
@@ -177,6 +186,7 @@ function advanced_sphinx_parse_request($request_options = array()) {
       $search_options['sorted'][$key] = $value;
     }
   }
+
   return $search_options;
 }
 
@@ -201,7 +211,9 @@ function advanced_sphinx_execute_query($search_options) {
     'excerpts' => array(),
     'groups' => array(),
   );
+
   $sphinx_query_keywords = array($search_options['keys']);
+
   // Obtain distributed index name, required to resolve search query.
   if (!variable_get('advanced_sphinx_query_index_delta', '')) {
     $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '');
@@ -209,21 +221,23 @@ function advanced_sphinx_execute_query($search_options) {
   else {
     $advanced_sphinx_query_index = variable_get('advanced_sphinx_query_index', '') . ',' . variable_get('advanced_sphinx_query_index_delta', '');
   }
+
   if (empty($advanced_sphinx_query_index)) {
     $search_results['error_message'] = t('Sphinx query index not specified.');
     return $search_results;
   }
+
   // Obtain excerpts index name, required to build excerpts.
   $advanced_sphinx_excerpts_index = variable_get('advanced_sphinx_excerpts_index', '');
   if (empty($advanced_sphinx_excerpts_index)) {
     $search_results['error_message'] = t('Sphinx excerpts index not specified.');
     return $search_results;
   }
+
   // Validate results per page option.
   if (!isset($search_options['results_per_page']) || $search_options['results_per_page'] <= 0) {
     $search_options['results_per_page'] = 25;
   }
-
 
   // Prepare Sphinx client for search queries.
   $current_page = advanced_sphinx_get_current_page();
@@ -239,6 +253,7 @@ function advanced_sphinx_execute_query($search_options) {
   // $advanced_sphinx->SetRankingMode(SPH_RANK_PROXIMITY_BM25);
   // $advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');
   // Sort options.
+
   if (isset($search_options['sorted'])) {
     foreach ($search_options['sorted'] as $key => $value) {
       if ($key == 'relevance') {
@@ -252,6 +267,7 @@ function advanced_sphinx_execute_query($search_options) {
   else {
     $advanced_sphinx->SetSortMode(SPH_SORT_EXPR, '@weight + ( countitl - ' . count($search_options['keys']) . ')*(-0.1)');
   }
+
   $advanced_sphinx->SetArrayResult(TRUE);
 
   if (isset($search_options['filters'])) {
@@ -266,6 +282,7 @@ function advanced_sphinx_execute_query($search_options) {
 
   // Send query to Sphinx.
   $sphinx_results = $advanced_sphinx->Query(implode(' ', $sphinx_query_keywords), $advanced_sphinx_query_index);
+
   if (!$sphinx_results) {
     $message = $advanced_sphinx->GetLastError();
     if (!advanced_sphinx_check_connection()) {
@@ -273,19 +290,24 @@ function advanced_sphinx_execute_query($search_options) {
       $search_results['error_message'] = t('Search service is disabled temporarily. Please, try again later.');
       return $search_results;
     }
+
     $search_results['error_message'] = t('Search failed using index %index. Sphinx error: %message', array(
       '%index' => $advanced_sphinx_query_index,
       '%message' => $message,
     ));
+
     return $search_results;
   }
   $message = $advanced_sphinx->GetLastWarning();
+
   if (!empty($message)) {
     $search_results['warnings'][] = t('Search query warning: %message', array('%message' => $message));
   }
+
   if (empty($sphinx_results['matches'])) {
     return $search_results;
   }
+
   // Save Sphinx query results.
   $search_results['total_found'] = (int) $sphinx_results['total_found'];
   $search_results['total_available'] = (int) $sphinx_results['total'];
@@ -300,6 +322,7 @@ function advanced_sphinx_execute_query($search_options) {
       $search_results['excerpts'][] = advanced_sphinx_get_node_text_fast($node);
     }
   }
+
   // Use Sphinx to build excerpts.
   // Build node titles with highlighted keywords.
   $search_results['titles'] = $advanced_sphinx->BuildExcerpts($search_results['titles'], $advanced_sphinx_excerpts_index, $sphinx_excerpt_keywords, array(
@@ -311,10 +334,12 @@ function advanced_sphinx_execute_query($search_options) {
     'exact_phrase' => ($search_options['matchmode'] == ADVANCED_SPHINX_MATCH_PHRASE),
     'single_passage' => TRUE,
   ));
+
   if (!$search_results['titles']) {
     $search_results['titles'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content titles. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
   }
+
   // Build node excerpts with highlighted keywords.
   $search_results['excerpts'] = $advanced_sphinx->BuildExcerpts($search_results['excerpts'], $advanced_sphinx_excerpts_index, $sphinx_excerpt_keywords, array(
     'before_match' => '<b>',
@@ -325,6 +350,7 @@ function advanced_sphinx_execute_query($search_options) {
     'exact_phrase' => ($search_options['matchmode'] == ADVANCED_SPHINX_MATCH_PHRASE),
     'single_passage' => $search_options['excerpts_single_passage'],
   ));
+
   if (!$search_results['excerpts']) {
     $search_results['excerpts'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content snippets. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
@@ -363,6 +389,7 @@ function advanced_sphinx_pager($total_results, $results_per_page, $pager_element
   $GLOBALS['pager_total_items'][$pager_element] = $total_results;
   $GLOBALS['pager_total'][$pager_element] = ceil($total_results / $results_per_page);
   $GLOBALS['pager_page_array'][$pager_element] = max(0, min((int) $GLOBALS['pager_page_array'][$pager_element], ((int) $GLOBALS['pager_total'][$pager_element]) - 1));
+
   return theme('pager');
 }
 
@@ -376,6 +403,7 @@ function advanced_sphinx_query_delete_sorts($query, $delete) {
       unset($query[$key]);
     }
   }
+
   return $query;
 }
 
@@ -390,8 +418,10 @@ function advanced_sphinx_get_current_sort($query) {
       $result[$key] = $value;
     }
   }
+
   if (empty($result)) {
     $result['sor-relevance'] = 'DESC';
   }
+
   return $result;
 }

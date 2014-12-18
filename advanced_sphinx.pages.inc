@@ -27,6 +27,7 @@ function advanced_sphinx_search_page() {
   if (variable_get('advanced_sphinx_logs', FALSE)) {
     variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
   }
+
   // Execute search query and collect the results.
   if (isset($search_options['keys']) || (!isset($search_options['keys']) && isset($search_options['view']))) {
     $search_results = advanced_sphinx_execute_query($search_options);
@@ -39,6 +40,7 @@ function advanced_sphinx_search_page() {
   else {
     $output = drupal_get_form('advanced_sphinx_search_form', $search_options);
   }
+
   return $output;
 }
 
@@ -61,14 +63,17 @@ function advanced_sphinx_search_form($form, &$form_state, $search_options = arra
       'class' => 'search-form',
     ),
   );
+
   $form['basic'] = array(
     '#type' => 'item',
     '#title' => t('Enter your keywords'),
   );
+
   $form['basic']['inline'] = array(
     '#prefix' => '<div class="container-inline">',
     '#suffix' => '</div>',
   );
+
   $form['basic']['inline']['keys'] = array(
     '#type' => 'textfield',
     '#title' => '',
@@ -76,6 +81,7 @@ function advanced_sphinx_search_form($form, &$form_state, $search_options = arra
     '#size' => 50,
     '#maxlength' => 255,
   );
+
   $form['basic']['inline']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Search'),
@@ -99,9 +105,11 @@ function advanced_sphinx_search_form_validate($form, &$form_state) {
 function advanced_sphinx_search_form_submit($form, &$form_state) {
   $search_options = advanced_sphinx_parse_request($form_state['values']);
   $query = advanced_sphinx_get_query_string($search_options);
+
   if (empty($query)) {
     form_set_error('keys', t('Please enter some keywords and/or other search options.'));
   }
+
   // Transform POST into a GET request.
   $form_state['redirect'] = advanced_sphinx_goto_search($query);
 }
@@ -113,6 +121,7 @@ function theme_advanced_sphinx_search_results($variables) {
   // Display information about query execution.
   $output = '';
   extract($variables);
+
   // Display list of formatted search results.
   if ($search_results['error_message']) {
     drupal_set_message($search_results['error_message'], 'error');
@@ -125,11 +134,13 @@ function theme_advanced_sphinx_search_results($variables) {
   if (!isset($result_wrapper['result'])) {
     $result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }
+
   $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.', array(
       '@count' => $search_results['total_found'],
       '@seconds' => round($search_results['time'], 3),
     )
   );
+
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
@@ -141,6 +152,7 @@ function theme_advanced_sphinx_search_results($variables) {
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
     $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array('query' => advanced_sphinx_get_query_string($search_options)));
   }
+
   $result_wrapper['search_form'] = drupal_get_form('advanced_sphinx_search_form', $search_options);
   $output .= theme('advanced_sphinx_result_wrapper', array('result' => $result_wrapper));
 
@@ -151,11 +163,13 @@ function theme_advanced_sphinx_search_results($variables) {
 
 function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
   extract($variables);
+
   $sorts = array(
     'sor-relevance' => t('Relevance'),
     'sor-created' => t('Date'),
     'sor-changed' => t('Update'),
   );
+
   $url = array();
   $search_path = variable_get('advanced_sphinx_search_path', 'search-content');
 
@@ -166,9 +180,11 @@ function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
 
   foreach ($sorts as $key => $value) {
     $class = '';
+
     if (in_array($key, array_keys($current_sort))) {
       $class = 'sortnow';
     }
+
     $url[$key] = array(
       'title' => $value,
       'href' => $search_path,
@@ -187,19 +203,24 @@ function advanced_sphinx_get_items_result_main($search_options, $search_results)
   foreach ($search_results['nodes'] as $item_id => $node) {
     $items_result['number'] = $item_id + 1 + $page * $search_options['results_per_page'];
     $title = (isset($search_results['titles'][$item_id]) ? $search_results['titles'][$item_id] : check_plain($node->title));
+
     if (variable_get('advanced_sphinx_logs', FALSE)) {
       $items_result['title'] = l($title, variable_get('advanced_sphinx_search_path', 'search-content') . '/service/' . $node->nid, array('html' => TRUE));
     }
     else {
       $items_result['title'] = l($title, 'node/' . $node->nid, array('html' => TRUE));
     }
+
     $items_result['excerpts'] = isset($search_results['excerpts'][$item_id]) ? '<p class="search-excerpt">' . $search_results['excerpts'][$item_id] . '</p>' . "\n" : '';
     $items_result['username'] = theme('username', array('account' => $node));
     $items_result['date'] = format_date($node->created, 'short');
+
     if (property_exists($node, 'comment_count')) {
       $items_result['comment_count'] = $node->comment_count;
     }
+
     $result_wrapper['result'] .= theme('advanced_sphinx_items_result_main', array('result' => $items_result));
   }
+
   return $result_wrapper;
 }

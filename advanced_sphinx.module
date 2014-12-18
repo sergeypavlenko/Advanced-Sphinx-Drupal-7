@@ -138,11 +138,13 @@ function advanced_sphinx_block_info() {
  */
 function advanced_sphinx_block_view($delta = '') {
   $blocks = array();
+
   switch ($delta) {
     case 'searchbox':
       if (!user_access('use advanced_sphinx') || advanced_sphinx_flood_limit_exceeded()) {
         return;
       }
+
       if (!advanced_sphinx_is_search_path()) {
         return array(
           'subject' => t('Search'),
@@ -165,6 +167,7 @@ function advanced_sphinx_search_box() {
     '#prefix' => '<div class="container-inline">',
     '#suffix' => '</div>',
   );
+
   $form['inline']['keys'] = array(
     '#type' => 'textfield',
     '#default_value' => '',
@@ -175,10 +178,12 @@ function advanced_sphinx_search_box() {
       'class' => array('search-sphinx'),
     ),
   );
+
   $form['inline']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('search'),
   );
+
   return $form;
 }
 
@@ -188,9 +193,11 @@ function advanced_sphinx_search_box() {
 function advanced_sphinx_search_box_submit($form, &$form_state) {
   $query = array();
   $keys = preg_replace('#\s+#', ' ', trim($form_state['values']['keys']));
+
   if (!empty($keys)) {
     $query['keys'] = $keys;
   }
+
   // Transform POST into a GET request.
   $form_state['redirect'] = advanced_sphinx_goto_search($query);
 }
@@ -208,7 +215,9 @@ function advanced_sphinx_get_memory_limit() {
   if (!function_exists('memory_get_usage')) {
     return -1;
   }
+
   $memory_limit = trim(@ini_get('memory_limit'));
+
   if (is_numeric($memory_limit)) {
     $memory_limit = (int) $memory_limit;
   }
@@ -226,6 +235,7 @@ function advanced_sphinx_get_memory_limit() {
         $memory_limit *= 1024;
     }
   }
+
   return $memory_limit;
 }
 
@@ -263,6 +273,7 @@ function advanced_sphinx_get_node_count($nid) {
     ->countQuery()
     ->execute()
     ->fetchField();
+
   return $result;
 }
 
@@ -286,6 +297,7 @@ function advanced_sphinx_get_data_sphinxmain($nid) {
  */
 function advanced_sphinx_get_node_info($nid) {
   $result = advanced_sphinx_get_data_sphinxmain($nid);
+
   if (module_exists('comment')) {
     $res = advanced_sphinx_get_node_count($nid);
     $result->comment_count = $res->comment_count;
@@ -301,6 +313,7 @@ function advanced_sphinx_get_node_info($nid) {
  */
 function advanced_sphinx_log($nid) {
   $keyword = variable_get('advanced_sphinx_keys', '');
+
   if ($keyword) {
     $count = db_select('advanced_sphinx_logs', 'logs')
       ->fields('logs', array('counter'))
@@ -310,6 +323,7 @@ function advanced_sphinx_log($nid) {
       ->fetchField();
 
     $count = $count ? $count : 0;
+
     if ($count == 0) {
       db_insert('advanced_sphinx_logs')
         ->fields(array('keyword' => $keyword, 'nid' => $nid, 'counter' => 1))
@@ -323,6 +337,7 @@ function advanced_sphinx_log($nid) {
         ->execute();
     }
   }
+
   drupal_goto('node/' . $nid);
 }
 
@@ -339,6 +354,7 @@ function advanced_sphinx_create_config_dir() {
       'index' => "$path_config/index",
       'log' => "$path_config/log",
     );
+
     file_prepare_directory($dirs['home'], FILE_CREATE_DIRECTORY);
     file_prepare_directory($dirs['index'], FILE_CREATE_DIRECTORY);
     file_prepare_directory($dirs['log'], FILE_CREATE_DIRECTORY);
@@ -353,6 +369,7 @@ function advanced_sphinx_create_config_dir() {
 function advanced_sphinx_create_config_file($dir) {
   $dir_path = realpath($dir);
   $file = $dir_path . '/sphinx.conf';
+
   if (file_prepare_directory($dir_path) && !file_exists($file)) {
     $config_content = advanced_sphinx_get_config_content($dir_path);
     file_put_contents($dir_path . '/sphinx.conf', render($config_content));
@@ -364,7 +381,9 @@ function advanced_sphinx_create_config_file($dir) {
  */
 function advanced_sphinx_get_config_content($dir_path = NULL) {
   global $databases;
+
   $settings = $databases['default']['default'];
+
   $config = array();
   $config['log'] = $dir_path . '/log/searchd.log' . " \n";
   $config['query_log'] = $dir_path . '/log/query.log' . " \n";
@@ -381,6 +400,7 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
   $config['sql_query_source_main'] = "SELECT nid, nid as node_id, title, body_value, created, changed, countitl FROM {$settings['prefix']}sphinxmain \n";
   $config['sql_query_info'] = "SELECT * FROM {$settings['prefix']}sphinxmain WHERE nid = \$id \n";
   $config['sql_query_source_delta'] = "SELECT nid, nid as node_id, title, body_value, created, changed, countitl FROM {$settings['prefix']}sphinxmain WHERE nid > ( SELECT max_doc_id FROM {$settings['prefix']}advanced_sphinx_livup WHERE counter_id = 1 ) \n";
+
   if (variable_get('advanced_sphinx_connections_type', 'socket') == 'socket') {
     $config['listen'] = $dir_path . '/sphinx.s' . " \n";
   }
