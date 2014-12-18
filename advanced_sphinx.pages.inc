@@ -106,6 +106,9 @@ function advanced_sphinx_search_form_submit($form, &$form_state) {
   $form_state['redirect'] = advanced_sphinx_goto_search($query);
 }
 
+/**
+ * Implements theme_THEMEID().
+ */
 function theme_advanced_sphinx_search_results($variables) {
   // Display information about query execution.
   $output = '';
