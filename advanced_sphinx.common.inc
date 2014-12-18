@@ -368,7 +368,7 @@ function advanced_sphinx_pager($total_results, $results_per_page, $pager_element
 
 
 /**
- * Delete sort parametrs from query
+ * Delete sort parameters from query.
  */
 function advanced_sphinx_query_delete_sorts($query, $delete) {
   foreach ($query as $key => $value) {
@@ -381,7 +381,7 @@ function advanced_sphinx_query_delete_sorts($query, $delete) {
 
 
 /**
- * Get current sort parametr
+ * Get current sort parameter.
  */
 function advanced_sphinx_get_current_sort($query) {
   $result = array();
