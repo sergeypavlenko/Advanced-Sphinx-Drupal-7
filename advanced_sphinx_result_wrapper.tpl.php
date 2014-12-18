@@ -1,6 +1,6 @@
 <?php
 /**
- * @file advanced_sphinx_result_wrapper.tpl.php
+ * @file
  * Default theme implementation to wrap search result.
  *
  * Available variables:
