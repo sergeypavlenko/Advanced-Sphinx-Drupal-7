@@ -9,7 +9,7 @@
  */
 function advanced_sphinx_load_common_includes() {
   $advanced_sphinx_module_path = drupal_get_path('module', 'advanced_sphinx');
-  require_once($advanced_sphinx_module_path . '/advanced_sphinx.common.inc');
+  require_once ($advanced_sphinx_module_path . '/advanced_sphinx.common.inc');
 }
 
 advanced_sphinx_load_common_includes();
