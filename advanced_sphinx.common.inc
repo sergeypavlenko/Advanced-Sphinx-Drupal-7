@@ -254,7 +254,7 @@ function advanced_sphinx_execute_query($search_options) {
 
   if (isset($search_options['filters'])) {
     foreach ($search_options['filters'] as $key => $value) {
-      $advanced_sphinx->SetFilter($key, $value, $exclude = FALSE);
+      $advanced_sphinx->SetFilter($key, $value, FALSE);
     }
   }
   // Grouping options.
