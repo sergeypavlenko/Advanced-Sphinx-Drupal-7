@@ -15,7 +15,7 @@ function advanced_sphinx_load_common_includes() {
 advanced_sphinx_load_common_includes();
 
 /**
- * Implements hook_theme()
+ * Implements hook_theme().
  */
 function advanced_sphinx_theme() {
   return array(
