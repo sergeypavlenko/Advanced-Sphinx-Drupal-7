@@ -20,7 +20,6 @@
  * view=v - view without keys
  */
 function advanced_sphinx_search_page() {
-  global $user;
   // Parse request and build search options structure.
   $search_options = advanced_sphinx_parse_request($_GET);
 
