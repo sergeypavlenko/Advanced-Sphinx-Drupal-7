@@ -159,9 +159,9 @@ function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
   $url = array();
   $search_path = variable_get('advanced_sphinx_search_path', 'search-content');
 
-  //get current sort in query
+  // Get current sort in query.
   $current_sort = advanced_sphinx_get_current_sort($query);
-  //delete sort-parametrs from query
+  // Delete sort-parameters from query.
   $query = advanced_sphinx_query_delete_sorts($query, array_keys($sorts));
 
   foreach ($sorts as $key => $value) {
