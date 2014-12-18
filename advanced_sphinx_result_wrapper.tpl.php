@@ -15,15 +15,15 @@
 
 <div class="search-stat">
   <?php print $result['stat']; ?>
-  <?php if (isset($result['word_stat'])) { ?>
+  <?php if (isset($result['word_stat'])): ?>
     <?php print $result['word_stat']; ?>
-  <?php } ?>
+  <?php endif; ?>
 </div>
 
-<?php if (isset($result['sorted'])) { ?>
+<?php if (isset($result['sorted'])): ?>
   <div
     class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
-<?php } ?>
+<?php endif; ?>
 
 <div id="advanced-search clear-block">
   <ul class="search-results">
@@ -31,8 +31,8 @@
   </ul>
 </div>
 
-<?php if (isset($result['sorted'])) { ?>
+<?php if (isset($result['sorted'])): ?>
   <div
     class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
-<?php } ?>
+<?php endif; ?>
 
