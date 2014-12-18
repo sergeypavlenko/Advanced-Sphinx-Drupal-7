@@ -8,6 +8,7 @@
  * future versions with no backwards compatibility. I should probably create a
  * sample module before it gets into something really reusable... and useful.
  */
+
 /**
  * List of supported search matching modes.
  */
