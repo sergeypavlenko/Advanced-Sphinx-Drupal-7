@@ -23,7 +23,7 @@ function advanced_sphinx_search_page() {
   // Parse request and build search options structure.
   $search_options = advanced_sphinx_parse_request($_GET);
 
-  //Set keys only if sphinx log enable(dirty-way)
+  // Set keys only if sphinx log enable(dirty-way).
   if (variable_get('advanced_sphinx_logs', FALSE)) {
     variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
   }
