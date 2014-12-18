@@ -388,7 +388,7 @@ function advanced_sphinx_get_config_content($dir_path = NULL) {
 
   $config_content = array(
     '#config' => $config,
-    '#theme' => 'advanced_sphinx_base_sphinx'
+    '#theme' => 'advanced_sphinx_base_sphinx',
   );
 
   return $config_content;
