@@ -358,7 +358,7 @@ function advanced_sphinx_create_config_file($dir) {
 }
 
 /**
- * Generate sphinx config
+ * Generate sphinx config.
  */
 function advanced_sphinx_get_config_content($dir_path = NULL) {
   global $databases;
