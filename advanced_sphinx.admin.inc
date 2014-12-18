@@ -68,7 +68,29 @@ function advanced_sphinx_settings() {
     '#type' => 'select',
     '#title' => t('Sphinx searchd connection timeout'),
     '#default_value' => variable_get('advanced_sphinx_searchd_timeout', 6),
-    '#options' => drupal_map_assoc(array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)),
+    '#options' => drupal_map_assoc(array(
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    )),
     '#description' => t('Timeout in seconds used for connections to your <strong>Sphinx searchd daemon</strong>. Leave 0 for PHP defaults for <a href="@fsockopen" target="_blank">fsockopen()</a>.', array('@fsockopen' => 'http://www.php.net/fsockopen')),
   );
 
@@ -128,7 +150,23 @@ function advanced_sphinx_settings() {
     '#type' => 'select',
     '#title' => t('Results per page'),
     '#default_value' => variable_get('advanced_sphinx_results_per_page', 25),
-    '#options' => drupal_map_assoc(array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100)),
+    '#options' => drupal_map_assoc(array(
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    )),
     '#description' => t('How many items will be shown on search results page.'),
   );
 
@@ -150,7 +188,19 @@ function advanced_sphinx_settings() {
     '#type' => 'select',
     '#title' => t('Excerpts size limit'),
     '#default_value' => variable_get('advanced_sphinx_excerpts_limit', 256),
-    '#options' => drupal_map_assoc(array(128, 192, 256, 320, 384, 448, 512, 640, 768, 896, 1024)),
+    '#options' => drupal_map_assoc(array(
+      128,
+      192,
+      256,
+      320,
+      384,
+      448,
+      512,
+      640,
+      768,
+      896,
+      1024
+    )),
     '#description' => t('Maximum snippet size (in Sphinx symbols) used to build content excerpts for search results.'),
   );
 
@@ -233,12 +283,12 @@ function advanced_sphinx_check_connection_page() {
   }
   else {
     $steps['connection']['messages'][] = t('ERROR') . ' - ' . t('Unable to connect to your Sphinx searchd daemon.') . theme('item_list', array(
-          'items' => array(
-            t('searchd host: %host', array('%host' => variable_get('advanced_sphinx_searchd_host', 'localhost'))),
-            t('searchd port: %port', array('%port' => (int) variable_get('advanced_sphinx_searchd_port', '3306'))),
-            t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError())),
-          ),
-        ));
+        'items' => array(
+          t('searchd host: %host', array('%host' => variable_get('advanced_sphinx_searchd_host', 'localhost'))),
+          t('searchd port: %port', array('%port' => (int) variable_get('advanced_sphinx_searchd_port', '3306'))),
+          t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError())),
+        ),
+      ));
   }
 
   // Check distributed index.
@@ -259,8 +309,8 @@ function advanced_sphinx_check_connection_page() {
     $sphinx_results = $advanced_sphinx->Query('', $advanced_sphinx_query_index);
     if (!$sphinx_results) {
       $steps['query']['messages'][] = t('ERROR') . ' - ' . t('Search query failed.') . theme('item_list', array(
-            'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
-          ));
+          'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
+        ));
     }
     else {
       if (!empty($sphinx_results['matches'])) {
@@ -274,21 +324,24 @@ function advanced_sphinx_check_connection_page() {
       }
 
       $steps['query']['messages'][] = t('OK') . ' - ' . t('Test passed successfully. Sphinx results summary follow:') . theme('item_list', array(
-            'items' => array(
-              t('Query execution time: @time seconds', array('@time' => $sphinx_results['time'])),
-              t('Total results found: @total', array('@total' => $sphinx_results['total_found'])),
-              t('Total results available: @total', array('@total' => $sphinx_results['total'])),
-              t('Last indexed node: @nid @updated', array('@nid' => $nid, '@updated' => $updated)),
-            ),
-          ));
+          'items' => array(
+            t('Query execution time: @time seconds', array('@time' => $sphinx_results['time'])),
+            t('Total results found: @total', array('@total' => $sphinx_results['total_found'])),
+            t('Total results available: @total', array('@total' => $sphinx_results['total'])),
+            t('Last indexed node: @nid @updated', array(
+              '@nid' => $nid,
+              '@updated' => $updated
+            )),
+          ),
+        ));
     }
 
     $warning = $advanced_sphinx->GetLastWarning();
 
     if (!empty($warning)) {
       $steps['query']['messages'][] = t('WARNING') . ' - ' . t('There was a problem while trying to resolve the query.') . theme('item_list', array(
-            'items' => array(t('Sphinx message: %message', array('%message' => $warning))),
-          ));
+          'items' => array(t('Sphinx message: %message', array('%message' => $warning))),
+        ));
     }
   }
 
@@ -308,17 +361,17 @@ function advanced_sphinx_check_connection_page() {
 
     if (!$excerpt_results) {
       $steps['excerpts']['messages'][] = t('ERROR') . ' - ' . t('Unable to build excerpts.') . theme('item_list', array(
-            'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
-          ));
+          'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
+        ));
     }
     else {
       $steps['excerpts']['messages'][] = t('OK') . ' - ' . t('Test passed successfully. Sphinx results summary follow:') . theme('item_list', array(
-            'items' => array(
-              t('Sample text: <code>@sample</code>', array('@sample' => $excerpt_samples[0])),
-              t('Keywords: <code>@keywords</code>', array('@keywords' => $excerpt_keywords)),
-              t('Result: <code>@result</code>', array('@result' => $excerpt_results[0])),
-            )
-          ));
+          'items' => array(
+            t('Sample text: <code>@sample</code>', array('@sample' => $excerpt_samples[0])),
+            t('Keywords: <code>@keywords</code>', array('@keywords' => $excerpt_keywords)),
+            t('Result: <code>@result</code>', array('@result' => $excerpt_results[0])),
+          )
+        ));
     }
   }
 
@@ -337,7 +390,10 @@ function advanced_sphinx_check_connection_page() {
   // Format HTML report.
   $items = array();
   foreach ($steps as $step) {
-    $items[] = theme('item_list', array('items' => $step['messages'], 'title' => $step['title']));
+    $items[] = theme('item_list', array(
+      'items' => $step['messages'],
+      'title' => $step['title']
+    ));
   }
   return theme('item_list', array('items' => $items));
 }

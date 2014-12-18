@@ -12,7 +12,7 @@
  *   - $result['result']: List of result.
  */
 ?>
-<?php print render($result['search_form']);?>
+<?php print render($result['search_form']); ?>
 
 <div class="search-stat">
   <?php print $result['stat']; ?>
@@ -21,8 +21,9 @@
   <?php } ?>
 </div>
 
-<?php if(isset($result['sorted'])){ ?>
-  <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
+<?php if (isset($result['sorted'])) { ?>
+  <div
+    class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php } ?>
 
 <div id="advanced-search clear-block">
@@ -31,7 +32,8 @@
   </ul>
 </div>
 
-<?php if(isset($result['sorted'])){ ?>
-  <div class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
+<?php if (isset($result['sorted'])) { ?>
+  <div
+    class="search-sorted"><?php print t('Sort') . ': ' . $result['sorted']; ?></div>
 <?php } ?>
 

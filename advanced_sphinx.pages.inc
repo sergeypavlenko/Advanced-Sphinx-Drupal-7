@@ -24,7 +24,7 @@ function advanced_sphinx_search_page() {
   global $user;
   // Parse request and build search options structure.
   $search_options = advanced_sphinx_parse_request($_GET);
-  
+
   //Set keys only if sphinx log enable(dirty-way)
   if (variable_get('advanced_sphinx_logs', FALSE)) {
     variable_set('advanced_sphinx_keys', isset($_GET['keys']) ? $_GET['keys'] : NULL);
@@ -114,23 +114,26 @@ function theme_advanced_sphinx_search_results($variables) {
   if ($search_results['error_message']) {
     drupal_set_message($search_results['error_message'], 'error');
   }
-  
+
   if ($search_results['warnings']) {
     drupal_set_message($search_results['warnings'], 'warnings');
   }
-  
+
   if (!isset($result_wrapper['result'])) {
     $result_wrapper = advanced_sphinx_get_items_result_main($search_options, $search_results);
   }
   $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.', array(
-    '@count' => $search_results['total_found'],
-    '@seconds' => round($search_results['time'], 3)
+      '@count' => $search_results['total_found'],
+      '@seconds' => round($search_results['time'], 3)
     )
   );
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
-      $words[] = '<em>' . check_plain($word) . '</em> (' . t('results: @docs, repeats: @hits', array('@docs' => (int) $word_data['docs'], '@hits' => (int) $word_data['hits'])) . ')';
+      $words[] = '<em>' . check_plain($word) . '</em> (' . t('results: @docs, repeats: @hits', array(
+          '@docs' => (int) $word_data['docs'],
+          '@hits' => (int) $word_data['hits']
+        )) . ')';
     }
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
     $result_wrapper['sorted'] = theme('advanced_sphinx_sorted_links', array('query' => advanced_sphinx_get_query_string($search_options)));
@@ -147,17 +150,17 @@ function theme_advanced_sphinx_sorted_links($variables, $sort = array()) {
   extract($variables);
   $sorts = array(
     'sor-relevance' => t('Relevance'),
-    'sor-created'   => t('Date'),
-    'sor-changed'   => t('Update'),
+    'sor-created' => t('Date'),
+    'sor-changed' => t('Update'),
   );
   $url = array();
   $search_path = variable_get('advanced_sphinx_search_path', 'search-content');
-  
+
   //get current sort in query
   $current_sort = advanced_sphinx_get_current_sort($query);
   //delete sort-parametrs from query
   $query = advanced_sphinx_query_delete_sorts($query, array_keys($sorts));
-  
+
   foreach ($sorts as $key => $value) {
     $class = '';
     if (in_array($key, array_keys($current_sort))) {

@@ -28,7 +28,8 @@ function advanced_sphinx_theme() {
     'advanced_sphinx_result_wrapper' => array(
       'template' => 'advanced_sphinx_result_wrapper',
       'variables' => array(
-        'result' => array()),
+        'result' => array()
+      ),
     ),
     'advanced_sphinx_items_result_main' => array(
       'template' => 'advanced_sphinx_items_result_main',
@@ -45,7 +46,8 @@ function advanced_sphinx_theme() {
     'advanced_sphinx_sorted_links' => array(
       'variables' => array(
         'query' => NULL,
-        'sort' => array()),
+        'sort' => array()
+      ),
     ),
   );
 }
@@ -235,7 +237,12 @@ function advanced_sphinx_get_node_text_fast(&$node) {
   $text = $node->body_value;
 
   // Strip off all tags, but insert space before/after them to keep word boundaries.
-  $text = str_replace(array('<', '>', '[', ']'), array(' <', '> ', ' ', ' '), $text);
+  $text = str_replace(array('<', '>', '[', ']'), array(
+    ' <',
+    '> ',
+    ' ',
+    ' '
+  ), $text);
   $text = preg_replace('#<(script|style)[^>]*>.*</\1>#s', ' ', $text);
   $text = strip_tags($text);
 
@@ -251,10 +258,10 @@ function advanced_sphinx_get_node_text_fast(&$node) {
 function advanced_sphinx_get_node_count($nid) {
   $result = new stdClass;
   $result->comment_count = db_select('comment', 'comment')
-      ->condition('nid', $nid, '=')
-      ->countQuery()
-      ->execute()
-      ->fetchField();
+    ->condition('nid', $nid, '=')
+    ->countQuery()
+    ->execute()
+    ->fetchField();
   return $result;
 }
 
@@ -264,10 +271,10 @@ function advanced_sphinx_get_node_count($nid) {
  */
 function advanced_sphinx_get_data_sphinxmain($nid) {
   $result = db_select('sphinxmain', 'sphinx')
-      ->fields('sphinx')
-      ->condition('nid', $nid, '=')
-      ->execute()
-      ->fetchObject();
+    ->fields('sphinx')
+    ->condition('nid', $nid, '=')
+    ->execute()
+    ->fetchObject();
 
   return $result;
 }
@@ -295,24 +302,24 @@ function advanced_sphinx_log($nid) {
   $keyword = variable_get('advanced_sphinx_keys', '');
   if ($keyword) {
     $count = db_select('advanced_sphinx_logs', 'logs')
-        ->fields('logs', array('counter'))
-        ->condition('nid', $nid, '=')
-        ->condition('keyword', $keyword, '=')
-        ->execute()
-        ->fetchField();
+      ->fields('logs', array('counter'))
+      ->condition('nid', $nid, '=')
+      ->condition('keyword', $keyword, '=')
+      ->execute()
+      ->fetchField();
 
     $count = $count ? $count : 0;
     if ($count == 0) {
       db_insert('advanced_sphinx_logs')
-          ->fields(array('keyword' => $keyword, 'nid' => $nid, 'counter' => 1))
-          ->execute();
+        ->fields(array('keyword' => $keyword, 'nid' => $nid, 'counter' => 1))
+        ->execute();
     }
     else {
       db_update('advanced_sphinx_logs')
-          ->fields('counter', $count + 1)
-          ->condition('nid', $nid, '=')
-          ->condition('keyword', $keyword, '=')
-          ->execute();
+        ->fields('counter', $count + 1)
+        ->condition('nid', $nid, '=')
+        ->condition('keyword', $keyword, '=')
+        ->execute();
     }
   }
   drupal_goto('node/' . $nid);

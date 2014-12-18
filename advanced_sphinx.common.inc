@@ -37,7 +37,10 @@ function advanced_sphinx_is_search_path($path = NULL) {
  *   This argument accepts a query string array or an already escaped query string.
  */
 function advanced_sphinx_goto_search($query = NULL) {
-  $url = array(variable_get('advanced_sphinx_search_path', 'search-content'), array('query' => $query));
+  $url = array(
+    variable_get('advanced_sphinx_search_path', 'search-content'),
+    array('query' => $query)
+  );
   return $url;
 }
 
@@ -272,7 +275,7 @@ function advanced_sphinx_execute_query($search_options) {
     $search_results['error_message'] = t('Search failed using index %index. Sphinx error: %message', array(
       '%index' => $advanced_sphinx_query_index,
       '%message' => $message,
-        ));
+    ));
     return $search_results;
   }
   $message = $advanced_sphinx->GetLastWarning();
@@ -307,7 +310,7 @@ function advanced_sphinx_execute_query($search_options) {
     'around' => 200, // Ignored when single_passage is TRUE.
     'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
     'single_passage' => TRUE,
-      ));
+  ));
   if (!$search_results['titles']) {
     $search_results['titles'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content titles. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
@@ -321,7 +324,7 @@ function advanced_sphinx_execute_query($search_options) {
     'around' => $search_options['excerpts_around'],
     'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
     'single_passage' => $search_options['excerpts_single_passage'],
-      ));
+  ));
   if (!$search_results['excerpts']) {
     $search_results['excerpts'] = array();
     $search_results['warnings'][] = t('Unable to build excerpts for content snippets. Sphinx error: %message', array('%message' => $advanced_sphinx->GetLastError()));
