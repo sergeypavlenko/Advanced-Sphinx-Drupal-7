@@ -231,7 +231,7 @@ function advanced_sphinx_get_memory_limit() {
 
 
 /**
- * Filter body value to plain text
+ * Filter body value to plain text.
  */
 function advanced_sphinx_get_node_text_fast(&$node) {
   $text = $node->body_value;
@@ -253,7 +253,7 @@ function advanced_sphinx_get_node_text_fast(&$node) {
 }
 
 /**
- * Count comments for node
+ * Count comments for node.
  */
 function advanced_sphinx_get_node_count($nid) {
   $result = new stdClass;
@@ -267,7 +267,7 @@ function advanced_sphinx_get_node_count($nid) {
 
 
 /**
- * Get results from sphinxmain view for node
+ * Get results from sphinxmain view for node.
  */
 function advanced_sphinx_get_data_sphinxmain($nid) {
   $result = db_select('sphinxmain', 'sphinx')
@@ -281,7 +281,7 @@ function advanced_sphinx_get_data_sphinxmain($nid) {
 
 
 /**
- * Return information about node
+ * Return information about node.
  */
 function advanced_sphinx_get_node_info($nid) {
   $result = advanced_sphinx_get_data_sphinxmain($nid);
@@ -296,7 +296,7 @@ function advanced_sphinx_get_node_info($nid) {
 
 
 /**
- * Insert data in sphinx log and redirect to node
+ * Insert data in sphinx log and redirect to node.
  */
 function advanced_sphinx_log($nid) {
   $keyword = variable_get('advanced_sphinx_keys', '');
@@ -327,7 +327,7 @@ function advanced_sphinx_log($nid) {
 
 
 /**
- * Create directory hierachy for sphinx config and sphinx config file if access available
+ * Create directory hierachy for sphinx config and sphinx config file if access available.
  */
 function advanced_sphinx_create_config_dir() {
   if (variable_get('advanced_sphinx_generate_config', FALSE) == 1) {
@@ -346,7 +346,7 @@ function advanced_sphinx_create_config_dir() {
 
 
 /**
- * Create sphinx config file if access available
+ * Create sphinx config file if access available.
  */
 function advanced_sphinx_create_config_file($dir) {
   $dir_path = realpath($dir);
