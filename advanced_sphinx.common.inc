@@ -12,9 +12,9 @@
 /**
  * List of supported search matching modes.
  */
-define('advanced_sphinx_MATCH_ALL', 0);
-define('advanced_sphinx_MATCH_ANY', 1);
-define('advanced_sphinx_MATCH_PHRASE', 2);
+define('ADVANCED_SPHINX_MATCH_ALL', 0);
+define('ADVANCED_SPHINX_MATCH_ANY', 1);
+define('ADVANCED_SPHINX_MATCH_PHRASE', 2);
 
 /**
  * Check if specified path is the Sphinx search page.
@@ -153,7 +153,7 @@ function advanced_sphinx_get_query_string($search_options) {
  */
 function advanced_sphinx_parse_request($request_options = array()) {
   $search_options = array(
-    'matchmode' => advanced_sphinx_MATCH_ALL,
+    'matchmode' => ADVANCED_SPHINX_MATCH_ALL,
     'results_per_page' => (int) variable_get('advanced_sphinx_results_per_page', 25),
     'excerpts_limit' => (int) variable_get('advanced_sphinx_excerpts_limit', 256),
     'excerpts_around' => (int) variable_get('advanced_sphinx_excerpts_around', 5),
@@ -307,7 +307,7 @@ function advanced_sphinx_execute_query($search_options) {
     'chunk_separator' => '',
     'limit' => 1024, // We want all text here, so using a high enough number.
     'around' => 200, // Ignored when single_passage is TRUE.
-    'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
+    'exact_phrase' => ($search_options['matchmode'] == ADVANCED_SPHINX_MATCH_PHRASE),
     'single_passage' => TRUE,
   ));
   if (!$search_results['titles']) {
@@ -321,7 +321,7 @@ function advanced_sphinx_execute_query($search_options) {
     'chunk_separator' => '<span class="search-chunk-separator"> ... </span>',
     'limit' => $search_options['excerpts_limit'],
     'around' => $search_options['excerpts_around'],
-    'exact_phrase' => ($search_options['matchmode'] == advanced_sphinx_MATCH_PHRASE),
+    'exact_phrase' => ($search_options['matchmode'] == ADVANCED_SPHINX_MATCH_PHRASE),
     'single_passage' => $search_options['excerpts_single_passage'],
   ));
   if (!$search_results['excerpts']) {
