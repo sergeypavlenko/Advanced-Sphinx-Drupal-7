@@ -185,7 +185,7 @@ function advanced_sphinx_settings() {
     '#type' => 'select',
     '#title' => t('Words around matches'),
     '#default_value' => variable_get('advanced_sphinx_excerpts_around', 5),
-    '#options' => drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
+    '#options' => range(1, 10),
     '#description' => t('How much words to pick around each matching keywords block when building excerpts. Note that the actual number of words around matches also depends on Sphinx index configuration options such as <code>min_word_len</code>, <code>charset_table</code>, etc.'),
   );
 
