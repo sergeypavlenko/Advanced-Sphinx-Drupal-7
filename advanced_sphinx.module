@@ -355,7 +355,7 @@ function advanced_sphinx_create_config_file($dir) {
   $file = $dir_path . '/sphinx.conf';
   if (file_prepare_directory($dir_path) && !file_exists($file)) {
     $config_content = advanced_sphinx_get_config_content($dir_path);
-    $inf = file_put_contents($dir_path . '/sphinx.conf', render($config_content));
+    file_put_contents($dir_path . '/sphinx.conf', render($config_content));
   }
 }
 
