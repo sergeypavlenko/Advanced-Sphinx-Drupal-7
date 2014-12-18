@@ -259,7 +259,7 @@ function advanced_sphinx_execute_query($search_options) {
   }
   // Grouping options.
   if (isset($search_options['group'])) {
-    $advanced_sphinx->SetGroupBy($search_options['group'], SPH_GROUPBY_ATTR, $groupsort = "@group desc");
+    $advanced_sphinx->SetGroupBy($search_options['group'], SPH_GROUPBY_ATTR, "@group desc");
   }
 
   // Send query to Sphinx.
